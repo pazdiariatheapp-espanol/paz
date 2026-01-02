@@ -1,0 +1,73 @@
+.container {
+  min-height: 100vh;
+  padding: var(--safe-top) var(--space-lg) var(--safe-bottom);
+  padding-top: calc(var(--safe-top) + var(--space-md));
+}
+
+.backBtn {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 1rem;
+  cursor: pointer;
+  padding: var(--space-sm);
+  margin-left: calc(var(--space-sm) * -1);
+}
+
+.content {
+  padding-top: var(--space-2xl);
+}
+
+.title {
+  font-size: 2rem;
+  margin-bottom: var(--space-xl);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.label {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.error {
+  padding: var(--space-md);
+  background: rgba(248, 113, 113, 0.1);
+  border: 1px solid rgba(248, 113, 113, 0.3);
+  border-radius: var(--radius-sm);
+  color: var(--mood-bad);
+  font-size: 0.9rem;
+}
+
+.switch {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  margin-top: var(--space-xl);
+}
+
+.switchText {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.switchBtn {
+  background: none;
+  border: none;
+  color: var(--accent-calm);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+}

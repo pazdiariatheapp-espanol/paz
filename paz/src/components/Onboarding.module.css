@@ -1,0 +1,118 @@
+.container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: var(--safe-top) var(--space-lg) var(--safe-bottom);
+  padding-top: calc(var(--safe-top) + var(--space-xl));
+  position: relative;
+  z-index: 1;
+  background: 
+    radial-gradient(at 20% 20%, rgba(126, 184, 218, 0.15) 0%, transparent 50%),
+    radial-gradient(at 80% 80%, rgba(168, 218, 220, 0.1) 0%, transparent 50%),
+    radial-gradient(at 50% 50%, rgba(244, 162, 97, 0.05) 0%, transparent 50%),
+    var(--bg-primary);
+}
+
+.skipBtn {
+  position: absolute;
+  top: calc(var(--safe-top) + var(--space-md));
+  right: var(--space-lg);
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1rem;
+  cursor: pointer;
+  padding: var(--space-md);
+  z-index: 100;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.slideContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: var(--space-xl) 0;
+}
+
+.iconContainer {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: var(--bg-glass);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border-glass);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--space-xl);
+}
+
+.icon {
+  font-size: 3.5rem;
+}
+
+.title {
+  font-size: 2rem;
+  margin-bottom: var(--space-sm);
+  background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-calm) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.subtitle {
+  font-size: 1.1rem;
+  color: var(--accent-calm);
+  margin-bottom: var(--space-lg);
+  font-weight: 500;
+}
+
+.description {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  max-width: 300px;
+}
+
+.progress {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-xl);
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--bg-glass);
+  border: 1px solid var(--border-glass);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.dotActive {
+  background: var(--accent-calm);
+  border-color: var(--accent-calm);
+  width: 24px;
+  border-radius: var(--radius-full);
+}
+
+.navigation {
+  padding-bottom: var(--space-xl);
+  position: relative;
+  z-index: 100;
+}
+
+.navigation button {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}

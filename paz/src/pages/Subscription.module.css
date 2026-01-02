@@ -1,0 +1,180 @@
+.container {
+  min-height: 100vh;
+  padding: var(--safe-top) var(--space-md) var(--safe-bottom);
+  padding-top: calc(var(--safe-top) + var(--space-md));
+}
+
+.closeBtn {
+  position: absolute;
+  top: calc(var(--safe-top) + var(--space-md));
+  right: var(--space-md);
+  width: 40px;
+  height: 40px;
+  background: var(--bg-glass);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border-glass);
+  border-radius: 50%;
+  color: var(--text-secondary);
+  font-size: 1.25rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.header {
+  text-align: center;
+  padding: var(--space-xl) 0;
+}
+
+.title {
+  font-size: 1.75rem;
+  margin-bottom: var(--space-sm);
+}
+
+.subtitle {
+  color: var(--text-secondary);
+}
+
+.plans {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  margin-bottom: var(--space-xl);
+}
+
+.planCard {
+  background: var(--bg-glass);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 2px solid var(--border-glass);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.planCardSelected {
+  border-color: var(--plan-color);
+  box-shadow: 0 0 30px rgba(126, 184, 218, 0.2);
+}
+
+.planCardHighlight {
+  background: linear-gradient(135deg, rgba(126, 184, 218, 0.1) 0%, rgba(168, 218, 220, 0.1) 100%);
+}
+
+.badge {
+  position: absolute;
+  top: -10px;
+  right: var(--space-md);
+  background: linear-gradient(135deg, var(--accent-calm) 0%, var(--accent-peace) 100%);
+  color: var(--bg-primary);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 6px 12px;
+  border-radius: var(--radius-full);
+}
+
+.planHeader {
+  margin-bottom: var(--space-md);
+}
+
+.planName {
+  font-size: 1.25rem;
+  font-family: var(--font-body);
+  font-weight: 700;
+  margin-bottom: var(--space-sm);
+}
+
+.planPrice {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.price {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--plan-color);
+}
+
+.period {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.yearlyPrice {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+.features {
+  list-style: none;
+  margin-bottom: var(--space-md);
+}
+
+.feature {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) 0;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.checkmark {
+  color: var(--plan-color);
+  font-weight: bold;
+}
+
+.note {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.selector {
+  position: absolute;
+  top: var(--space-lg);
+  right: var(--space-lg);
+  width: 24px;
+  height: 24px;
+  border: 2px solid var(--border-glass);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.selectorActive {
+  border-color: var(--plan-color);
+}
+
+.selectorInner {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: transparent;
+  transition: all 0.3s ease;
+}
+
+.selectorActive .selectorInner {
+  background: var(--plan-color);
+}
+
+.cta {
+  padding-bottom: var(--space-xl);
+}
+
+.terms {
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: var(--space-md);
+}

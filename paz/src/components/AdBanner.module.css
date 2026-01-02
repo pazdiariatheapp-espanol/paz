@@ -1,0 +1,33 @@
+.container {
+  position: fixed;
+  bottom: 80px;
+  left: 0;
+  right: 0;
+  padding: 0 var(--space-md);
+  padding-bottom: var(--safe-bottom);
+  z-index: 99;
+  pointer-events: none;
+}
+
+.banner {
+  background: linear-gradient(135deg, rgba(126, 184, 218, 0.2) 0%, rgba(168, 218, 220, 0.2) 100%);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-sm);
+  padding: var(--space-sm) var(--space-md);
+  text-align: center;
+  cursor: pointer;
+  pointer-events: all;
+  transition: all 0.3s ease;
+}
+
+.banner:active {
+  transform: scale(0.98);
+  background: linear-gradient(135deg, rgba(126, 184, 218, 0.3) 0%, rgba(168, 218, 220, 0.3) 100%);
+}
+
+.text {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}

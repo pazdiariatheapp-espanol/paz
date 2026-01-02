@@ -1,0 +1,130 @@
+.container {
+  padding-top: var(--space-lg);
+  min-height: 80vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  margin-bottom: var(--space-xl);
+}
+
+.title {
+  font-size: 1.5rem;
+}
+
+.section {
+  margin-bottom: var(--space-xl);
+}
+
+.label {
+  display: block;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: var(--space-sm);
+}
+
+.sublabel {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: var(--space-md);
+}
+
+.textarea {
+  width: 100%;
+  min-height: 150px;
+  padding: var(--space-lg);
+  background: var(--bg-glass);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.6;
+  resize: none;
+}
+
+.textarea:focus {
+  outline: none;
+  border-color: var(--accent-calm);
+}
+
+.textarea::placeholder {
+  color: var(--text-muted);
+}
+
+.gratitudeList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.gratitudeItem {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.gratitudeNumber {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent-joy) 0%, var(--accent-energy) 100%);
+  color: var(--bg-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.gratitudeInput {
+  flex: 1;
+  padding: var(--space-md);
+  background: var(--bg-glass);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+}
+
+.gratitudeInput:focus {
+  outline: none;
+  border-color: var(--accent-joy);
+}
+
+.gratitudeInput::placeholder {
+  color: var(--text-muted);
+}
+
+.success {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.successEmoji {
+  font-size: 5rem;
+  margin-bottom: var(--space-lg);
+  animation: bounce 0.6s ease;
+}
+
+.successText {
+  font-size: 1.5rem;
+  color: var(--accent-calm);
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+}

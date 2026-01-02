@@ -1,0 +1,226 @@
+.container {
+  padding-top: var(--space-lg);
+  padding-bottom: var(--space-2xl);
+}
+
+.header {
+  margin-bottom: var(--space-lg);
+}
+
+.title {
+  font-size: 1.5rem;
+  margin-bottom: var(--space-xs);
+}
+
+.subtitle {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.volumeControl {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-md);
+  background: var(--bg-glass);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-lg);
+}
+
+.volumeIcon {
+  font-size: 1.25rem;
+}
+
+.volumeSlider {
+  flex: 1;
+  height: 4px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: var(--border-glass);
+  border-radius: var(--radius-full);
+  outline: none;
+}
+
+.volumeSlider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  background: var(--accent-calm);
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.volumeSlider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  background: var(--accent-calm);
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+}
+
+.nowPlaying {
+  margin-bottom: var(--space-lg);
+  overflow: hidden;
+}
+
+.nowPlayingContent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-md) var(--space-lg);
+  background: linear-gradient(135deg, var(--accent-calm) 0%, var(--accent-peace) 100%);
+  border-radius: var(--radius-md);
+}
+
+.nowPlayingLabel {
+  color: var(--bg-primary);
+  font-weight: 600;
+}
+
+.stopBtn {
+  background: rgba(0, 0, 0, 0.2);
+  border: none;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-full);
+  color: var(--bg-primary);
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.stopBtn:active {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.categories {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+}
+
+.category {
+  /* No additional styles needed */
+}
+
+.categoryHeader {
+  margin-bottom: var(--space-md);
+}
+
+.categoryTitle {
+  font-size: 1.1rem;
+  font-family: var(--font-body);
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: var(--space-xs);
+}
+
+.categorySubtitle {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.soundGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-sm);
+}
+
+.soundCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-md) var(--space-sm);
+  background: var(--bg-glass);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 2px solid var(--border-glass);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.soundCard:active {
+  transform: scale(0.95);
+}
+
+.soundCardActive {
+  border-color: var(--sound-color, var(--accent-calm));
+  background: var(--bg-glass-hover);
+  box-shadow: 0 0 20px color-mix(in srgb, var(--sound-color, var(--accent-calm)) 30%, transparent);
+}
+
+.soundIcon {
+  font-size: 1.75rem;
+}
+
+.soundName {
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  text-align: center;
+  line-height: 1.2;
+}
+
+.soundHz {
+  font-size: 0.65rem;
+  color: var(--accent-calm);
+  font-weight: 600;
+}
+
+.playingIndicator {
+  position: absolute;
+  bottom: var(--space-sm);
+  display: flex;
+  gap: 3px;
+}
+
+.playingDot {
+  width: 4px;
+  height: 4px;
+  background: var(--accent-calm);
+  border-radius: 50%;
+  animation: pulse 1s ease-in-out infinite;
+}
+
+.playingDot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.playingDot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.5);
+    opacity: 1;
+  }
+}
+
+.reminder {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-md);
+  background: var(--bg-glass);
+  border-radius: var(--radius-md);
+  margin-top: var(--space-xl);
+}
+
+.reminder span {
+  font-size: 1.5rem;
+}
+
+.reminder p {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+}

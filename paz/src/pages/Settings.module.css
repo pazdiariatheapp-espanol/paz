@@ -1,0 +1,196 @@
+.container {
+  padding-top: var(--space-lg);
+  padding-bottom: var(--space-xl);
+}
+
+.header {
+  margin-bottom: var(--space-xl);
+}
+
+.title {
+  font-size: 1.5rem;
+}
+
+.section {
+  margin-bottom: var(--space-lg);
+}
+
+.sectionTitle {
+  font-size: 0.85rem;
+  font-family: var(--font-body);
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--space-sm);
+  padding-left: var(--space-sm);
+}
+
+.settingCard {
+  padding: var(--space-md) var(--space-lg);
+}
+
+.settingRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.settingInfo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.settingIcon {
+  font-size: 1.25rem;
+}
+
+.settingLabel {
+  font-size: 1rem;
+  color: var(--text-primary);
+}
+
+.planBadge {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--accent-calm);
+  font-weight: 600;
+}
+
+.toggleBtn {
+  background: var(--bg-glass);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-full);
+  padding: var(--space-sm) var(--space-md);
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.toggleBtn:active {
+  transform: scale(0.95);
+}
+
+.switch {
+  width: 50px;
+  height: 28px;
+  background: var(--bg-glass);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-full);
+  padding: 2px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.switchOn {
+  background: var(--accent-calm);
+  border-color: var(--accent-calm);
+}
+
+.switchThumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 22px;
+  height: 22px;
+  background: white;
+  border-radius: 50%;
+  transition: transform 0.3s ease;
+}
+
+.switchOn .switchThumb {
+  transform: translateX(22px);
+}
+
+.upgradeBtn {
+  background: linear-gradient(135deg, var(--accent-calm) 0%, var(--accent-peace) 100%);
+  color: var(--bg-primary);
+  border: none;
+  border-radius: var(--radius-full);
+  padding: var(--space-sm) var(--space-md);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.upgradeBtn:active {
+  transform: scale(0.95);
+}
+
+.signOutBtn {
+  width: 100%;
+  padding: var(--space-md);
+  background: rgba(248, 113, 113, 0.1);
+  border: 1px solid rgba(248, 113, 113, 0.3);
+  border-radius: var(--radius-md);
+  color: var(--mood-bad);
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.signOutBtn:active {
+  background: rgba(248, 113, 113, 0.2);
+}
+
+.themeGrid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: var(--space-sm);
+}
+
+.themeBtn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-md) var(--space-sm);
+  background: var(--bg-glass);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 2px solid var(--border-glass);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.themeBtn:active {
+  transform: scale(0.95);
+}
+
+.themeBtnActive {
+  border-color: var(--accent-calm);
+  background: var(--bg-glass-hover);
+}
+
+.themeEmoji {
+  font-size: 1.5rem;
+}
+
+.themeLabel {
+  font-size: 0.65rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.footer {
+  margin-top: var(--space-2xl);
+  text-align: center;
+}
+
+.version {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: var(--space-xs);
+}
+
+.copyright {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}

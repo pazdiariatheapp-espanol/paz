@@ -81,7 +81,7 @@ function Welcome() {
       >
         <button 
           className="btn-primary"
-          onClick={() => navigate('/auth')}
+          onClick={() => navigate('/pricing')}
           style={{ width: '100%', padding: '16px 32px', fontSize: '1.05rem' }}
         >
           {t('signUp')}

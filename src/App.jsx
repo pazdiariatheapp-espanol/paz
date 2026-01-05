@@ -6,6 +6,7 @@ import { supabase, getCurrentUser } from './lib/supabase'
 // Pages
 import Welcome from './pages/Welcome'
 import Auth from './pages/Auth'
+import Pricing from './pages/Pricing'
 import Home from './pages/Home'
 import MoodCheckIn from './pages/MoodCheckIn'
 import Breathe from './pages/Breathe'
@@ -71,6 +72,7 @@ function App() {
         {/* Public routes */}
         <Route path="/welcome" element={!user ? <Welcome /> : <Navigate to="/" />} />
         <Route path="/auth" element={!user ? <Auth /> : <Navigate to="/" />} />
+        <Route path="/pricing" element={<Pricing />} />
         
         {/* Protected routes */}
         <Route path="/" element={user ? <Layout /> : <Navigate to="/welcome" />}>

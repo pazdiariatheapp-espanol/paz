@@ -1,5 +1,5 @@
+
 import React from 'react';
-import { Check } from 'lucide-react';
 
 export default function PricingPage() {
   const plans = [
@@ -90,7 +90,7 @@ export default function PricingPage() {
               <ul className="space-y-3 mb-8">
                 {plan.features.map((feature, i) => (
                   <li key={i} className="flex items-start text-blue-100">
-                    <Check className="w-5 h-5 text-green-400 mr-3 mt-0.5 flex-shrink-0" />
+                    <span className="text-green-400 mr-3 text-lg">✓</span>
                     <span>{feature}</span>
                   </li>
                 ))}

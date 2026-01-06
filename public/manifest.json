@@ -1,0 +1,24 @@
+{
+  "name": "Paz - Your Daily Peace",
+  "short_name": "Paz",
+  "description": "A simple app to help you manage stress, track your mood, and find moments of calm",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#7eb8da",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { useStore } from './store/useStore'
 import { supabase, getCurrentUser } from './lib/supabase'
+import { registerServiceWorker } from './registerSW'
 
 // Pages
 import Welcome from './pages/Welcome'
@@ -29,6 +30,11 @@ function App() {
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme || 'dark')
   }, [theme])
+
+  // Register service worker for PWA
+  useEffect(() => {
+    registerServiceWorker()
+  }, [])
 
   useEffect(() => {
     // Check for existing session

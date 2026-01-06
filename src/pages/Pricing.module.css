@@ -1,0 +1,302 @@
+.container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0f172a 0%, #581c87 50%, #0f172a 100%);
+  padding: 2rem 1rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.backgroundBlob1,
+.backgroundBlob2,
+.backgroundBlob3 {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.2;
+  animation: blob 7s infinite;
+}
+
+.backgroundBlob1 {
+  top: 5rem;
+  left: 2.5rem;
+  width: 18rem;
+  height: 18rem;
+  background: #3b82f6;
+}
+
+.backgroundBlob2 {
+  top: 10rem;
+  right: 2.5rem;
+  width: 18rem;
+  height: 18rem;
+  background: #a855f7;
+  animation-delay: 2s;
+}
+
+.backgroundBlob3 {
+  bottom: 5rem;
+  left: 50%;
+  width: 18rem;
+  height: 18rem;
+  background: #ec4899;
+  animation-delay: 4s;
+}
+
+@keyframes blob {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(30px, -50px) scale(1.1); }
+  66% { transform: translate(-20px, 20px) scale(0.9); }
+}
+
+.content {
+  max-width: 75rem;
+  margin: 0 auto;
+  position: relative;
+  z-index: 10;
+}
+
+.header {
+  text-center;
+  margin-bottom: 2rem;
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  background: linear-gradient(90deg, #60a5fa, #a78bfa, #f472b6);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  margin-bottom: 0.75rem;
+  animation: gradient 3s ease infinite;
+}
+
+@keyframes gradient {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.subtitle {
+  color: #e9d5ff;
+  font-size: 1.125rem;
+  font-weight: 500;
+}
+
+.plansGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  max-width: 80rem;
+  margin: 0 auto 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .plansGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.planCard {
+  position: relative;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  border-radius: 1.5rem;
+  padding: 1.5rem;
+  border: 2px solid rgba(96, 165, 250, 0.4);
+  transition: all 0.3s;
+}
+
+.planCard:hover {
+  transform: scale(1.05);
+}
+
+.planCardHighlight {
+  border-color: #a78bfa;
+  box-shadow: 0 20px 50px rgba(167, 139, 250, 0.5);
+}
+
+.badge {
+  position: absolute;
+  top: -0.75rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+}
+
+.badge span {
+  padding: 0.375rem 1rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: bold;
+  color: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.badge-premium-plus {
+  background: linear-gradient(90deg, #a855f7, #ec4899, #f43f5e);
+}
+
+.planHeader {
+  text-center;
+  margin-bottom: 1.25rem;
+  margin-top: 0.5rem;
+}
+
+.planName-premium {
+  font-size: 1.875rem;
+  font-weight: 800;
+  background: linear-gradient(90deg, #22d3ee, #3b82f6, #2563eb);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  margin-bottom: 0.25rem;
+}
+
+.planName-premium-plus {
+  font-size: 1.875rem;
+  font-weight: 800;
+  background: linear-gradient(90deg, #a855f7, #ec4899, #f43f5e);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  margin-bottom: 0.25rem;
+}
+
+.planSubtitle-premium {
+  font-size: 0.875rem;
+  font-weight: 600;
+  background: linear-gradient(90deg, #22d3ee, #3b82f6);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.planSubtitle-premium-plus {
+  font-size: 0.875rem;
+  font-weight: 600;
+  background: linear-gradient(90deg, #a855f7, #ec4899);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.featuresList {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.5rem 0;
+}
+
+.feature {
+  display: flex;
+  align-items: flex-start;
+  color: #dbeafe;
+  margin-bottom: 0.625rem;
+  font-size: 0.875rem;
+}
+
+.checkmark {
+  color: #34d399;
+  margin-right: 0.625rem;
+  font-size: 1.125rem;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+}
+
+.button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.875rem 1.25rem;
+  border-radius: 1rem;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-size: 1rem;
+}
+
+.buttonPrimary-premium {
+  background: linear-gradient(90deg, #22d3ee, #3b82f6, #2563eb);
+  color: white;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.buttonPrimary-premium:hover {
+  opacity: 0.9;
+  transform: scale(1.05);
+}
+
+.buttonPrimary-premium-plus {
+  background: linear-gradient(90deg, #a855f7, #ec4899, #f43f5e);
+  color: white;
+  box-shadow: 0 4px 12px rgba(168, 85, 247, 0.4);
+}
+
+.buttonPrimary-premium-plus:hover {
+  opacity: 0.9;
+  transform: scale(1.05);
+}
+
+.buttonSecondary {
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.buttonSecondary:hover {
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.yearlyInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.save-premium {
+  font-size: 0.75rem;
+  font-weight: bold;
+  background: linear-gradient(90deg, #22d3ee, #3b82f6);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.save-premium-plus {
+  font-size: 0.75rem;
+  font-weight: bold;
+  background: linear-gradient(90deg, #a855f7, #ec4899);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.price {
+  font-size: 1.25rem;
+  font-weight: 800;
+}
+
+.footer {
+  text-center;
+}
+
+.footer p {
+  color: #e9d5ff;
+  font-size: 0.875rem;
+  font-weight: 500;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(4px);
+  border-radius: 9999px;
+  padding: 0.75rem 1.5rem;
+  display: inline-block;
+  border: 1px solid rgba(216, 180, 254, 0.3);
+}

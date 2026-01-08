@@ -1,4 +1,4 @@
-# 🧘 Paz
+# Paz
 
 A bilingual (English/Spanish) mental health and wellness app designed for working-class Hispanic/Latino families managing everyday stress.
 

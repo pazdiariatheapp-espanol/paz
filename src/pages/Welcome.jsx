@@ -53,19 +53,19 @@ function Welcome() {
         transition={{ delay: 0.4, duration: 0.6 }}
       >
         <div className={styles.feature}>
-          <span className={styles.featureIcon}>🌙</span>
+          <img src="/mood-icon.png" alt="Mood" className={styles.featureIcon} />
           <span className={styles.featureText}>
             {language === 'en' ? 'Track your mood daily' : 'Registra tu ánimo diario'}
           </span>
         </div>
         <div className={styles.feature}>
-          <span className={styles.featureIcon}>🌬️</span>
+          <img src="/breathing-icon.png" alt="Breathing" className={styles.featureIcon} />
           <span className={styles.featureText}>
             {language === 'en' ? 'Breathing exercises' : 'Ejercicios de respiración'}
           </span>
         </div>
         <div className={styles.feature}>
-          <span className={styles.featureIcon}>📝</span>
+          <img src="/journal-icon.png" alt="Journal" className={styles.featureIcon} />
           <span className={styles.featureText}>
             {language === 'en' ? 'Gratitude journal' : 'Diario de gratitud'}
           </span>

@@ -45,33 +45,10 @@
 }
 
 .logo {
-  width: 90px;
-  height: 90px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--accent-calm) 0%, var(--accent-peace) 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
   animation: pulse 4s ease-in-out infinite;
-}
-
-.logo::before {
-  content: '';
-  position: absolute;
-  inset: -4px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--accent-calm) 0%, var(--accent-peace) 100%);
-  opacity: 0.3;
-  filter: blur(20px);
-}
-
-.logoInner {
-  width: 55px;
-  height: 55px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.3);
-  backdrop-filter: blur(10px);
 }
 
 .title {

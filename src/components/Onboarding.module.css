@@ -56,6 +56,12 @@
   font-size: 3.5rem;
 }
 
+.iconImage {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+}
+
 .title {
   font-size: 2rem;
   margin-bottom: var(--space-sm);

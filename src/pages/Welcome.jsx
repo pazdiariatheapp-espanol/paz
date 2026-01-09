@@ -36,9 +36,7 @@ function Welcome() {
         transition={{ duration: 0.8 }}
       >
         <div className={styles.logoContainer}>
-          <div className={styles.logo}>
-            <div className={styles.logoInner} />
-          </div>
+          <img src="/brain-logo.png" alt="Paz Diaria" className={styles.logo} />
         </div>
         
         <h1 className={styles.title}>PAZ</h1>

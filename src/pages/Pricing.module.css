@@ -1,24 +1,23 @@
 .container {
   min-height: 100vh;
-  min-height: 100dvh;
+  height: auto;
   background: linear-gradient(135deg, #0f172a 0%, #581c87 50%, #0f172a 100%);
-  padding: 2rem 1rem;
-  padding-bottom: 3rem;
+  padding: 2rem 1rem 3rem;
   position: relative;
   overflow-x: hidden;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
+  overflow-y: visible;
 }
 
 .backgroundBlob1,
 .backgroundBlob2,
 .backgroundBlob3 {
-  position: absolute;
+  position: fixed;
   border-radius: 50%;
   filter: blur(60px);
   opacity: 0.2;
   animation: blob 7s infinite;
   pointer-events: none;
+  z-index: 0;
 }
 
 .backgroundBlob1 {
@@ -58,6 +57,7 @@
   margin: 0 auto;
   position: relative;
   z-index: 10;
+  padding-bottom: 2rem;
 }
 
 .header {
@@ -217,7 +217,7 @@
   grid-template-columns: 1fr;
   gap: 1.5rem;
   max-width: 80rem;
-  margin: 0 auto 1.5rem;
+  margin: 0 auto 2rem;
 }
 
 @media (min-width: 768px) {
@@ -468,10 +468,6 @@
 }
 
 @media (max-height: 700px) {
-  .container {
-    padding: 1rem 1rem 1.5rem;
-  }
-
   .header {
     margin-bottom: 1rem;
   }

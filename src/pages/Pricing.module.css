@@ -1,9 +1,13 @@
 .container {
   min-height: 100vh;
+  min-height: 100dvh;
   background: linear-gradient(135deg, #0f172a 0%, #581c87 50%, #0f172a 100%);
   padding: 2rem 1rem;
+  padding-bottom: 3rem;
   position: relative;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .backgroundBlob1,
@@ -14,6 +18,7 @@
   filter: blur(60px);
   opacity: 0.2;
   animation: blob 7s infinite;
+  pointer-events: none;
 }
 
 .backgroundBlob1 {
@@ -83,6 +88,130 @@
   font-weight: 500;
 }
 
+/* Free Trial Card */
+.freeTrialCard {
+  max-width: 600px;
+  margin: 0 auto 2rem;
+  background: linear-gradient(135deg, rgba(96, 165, 250, 0.2), rgba(167, 139, 250, 0.2));
+  backdrop-filter: blur(20px);
+  border-radius: 1.5rem;
+  padding: 2rem 1.5rem;
+  border: 2px solid rgba(96, 165, 250, 0.5);
+  text-align: center;
+  position: relative;
+  box-shadow: 0 20px 50px rgba(96, 165, 250, 0.3);
+}
+
+.freeTrialBadge {
+  position: absolute;
+  top: -1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(90deg, #10b981, #34d399);
+  color: white;
+  padding: 0.5rem 1.5rem;
+  border-radius: 9999px;
+  font-weight: bold;
+  font-size: 0.875rem;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+}
+
+.freeTrialTitle {
+  font-size: 2rem;
+  font-weight: 800;
+  background: linear-gradient(90deg, #60a5fa, #a78bfa);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  margin-bottom: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.freeTrialSubtitle {
+  color: #e9d5ff;
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.freeTrialFeatures {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.5rem 0;
+  text-align: left;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.freeTrialFeatures li {
+  color: #dbeafe;
+  margin-bottom: 0.75rem;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.freeTrialButton {
+  width: 100%;
+  max-width: 400px;
+  padding: 1rem 2rem;
+  background: linear-gradient(90deg, #10b981, #34d399, #10b981);
+  background-size: 200% 200%;
+  color: white;
+  border: none;
+  border-radius: 1rem;
+  font-size: 1.125rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+  animation: gradient 3s ease infinite;
+}
+
+.freeTrialButton:hover:not(:disabled) {
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.6);
+}
+
+.freeTrialButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.divider {
+  text-align: center;
+  margin: 2rem 0;
+  position: relative;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 40%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+}
+
+.divider::before {
+  left: 0;
+}
+
+.divider::after {
+  right: 0;
+}
+
+.divider span {
+  color: #e9d5ff;
+  font-size: 0.875rem;
+  padding: 0 1rem;
+  background: rgba(15, 23, 42, 0.8);
+  position: relative;
+  z-index: 1;
+}
+
 .plansGrid {
   display: grid;
   grid-template-columns: 1fr;
@@ -108,7 +237,7 @@
 }
 
 .planCard:hover {
-  transform: scale(1.05);
+  transform: scale(1.02);
 }
 
 .planCardHighlight {
@@ -223,13 +352,18 @@
   font-size: 1rem;
 }
 
+.button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 .buttonPrimary-premium {
   background: linear-gradient(90deg, #22d3ee, #3b82f6, #2563eb);
   color: white;
   box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
 }
 
-.buttonPrimary-premium:hover {
+.buttonPrimary-premium:hover:not(:disabled) {
   opacity: 0.9;
   transform: scale(1.05);
 }
@@ -240,7 +374,7 @@
   box-shadow: 0 4px 12px rgba(168, 85, 247, 0.4);
 }
 
-.buttonPrimary-premium-plus:hover {
+.buttonPrimary-premium-plus:hover:not(:disabled) {
   opacity: 0.9;
   transform: scale(1.05);
 }
@@ -251,7 +385,7 @@
   border: 2px solid rgba(255, 255, 255, 0.2);
 }
 
-.buttonSecondary:hover {
+.buttonSecondary:hover:not(:disabled) {
   background: linear-gradient(90deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
   border-color: rgba(255, 255, 255, 0.4);
 }
@@ -287,6 +421,7 @@
 
 .footer {
   text-align: center;
+  padding-bottom: 1rem;
 }
 
 .footer p {
@@ -299,4 +434,62 @@
   padding: 0.75rem 1.5rem;
   display: inline-block;
   border: 1px solid rgba(216, 180, 254, 0.3);
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  .container {
+    padding: 1.5rem 1rem 2rem;
+  }
+
+  .title {
+    font-size: 2rem;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+  }
+
+  .freeTrialCard {
+    padding: 1.5rem 1rem;
+  }
+
+  .freeTrialTitle {
+    font-size: 1.5rem;
+  }
+
+  .planCard {
+    padding: 1.25rem;
+  }
+
+  .planCard:hover {
+    transform: scale(1);
+  }
+}
+
+@media (max-height: 700px) {
+  .container {
+    padding: 1rem 1rem 1.5rem;
+  }
+
+  .header {
+    margin-bottom: 1rem;
+  }
+
+  .freeTrialCard {
+    margin-bottom: 1rem;
+    padding: 1.25rem 1rem;
+  }
+
+  .freeTrialTitle {
+    font-size: 1.5rem;
+  }
+
+  .divider {
+    margin: 1rem 0;
+  }
+
+  .plansGrid {
+    gap: 1rem;
+  }
 }

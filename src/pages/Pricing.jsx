@@ -1,7 +1,22 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styles from './Pricing.module.css';
 
 export default function PricingPage() {
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleFreeTrial = () => {
+    setIsLoading(true);
+    // Navigate to sign up with free trial
+    navigate('/auth?mode=signup&trial=true');
+  };
+
+  const handlePlanSelect = (link) => {
+    setIsLoading(true);
+    window.location.href = link;
+  };
+
   const plans = [
     {
       name: 'Premium',
@@ -61,6 +76,29 @@ export default function PricingPage() {
           <p className={styles.subtitle}>Start your journey to daily peace</p>
         </div>
 
+        {/* Free Trial Card */}
+        <div className={styles.freeTrialCard}>
+          <div className={styles.freeTrialBadge}>🎁 FREE</div>
+          <h2 className={styles.freeTrialTitle}>3-Day Free Trial</h2>
+          <p className={styles.freeTrialSubtitle}>Experience all features with no commitment</p>
+          <ul className={styles.freeTrialFeatures}>
+            <li>✓ Full access to all features</li>
+            <li>✓ No credit card required</li>
+            <li>✓ Cancel anytime</li>
+          </ul>
+          <button
+            onClick={handleFreeTrial}
+            disabled={isLoading}
+            className={styles.freeTrialButton}
+          >
+            {isLoading ? 'Loading...' : 'Start Free Trial'}
+          </button>
+        </div>
+
+        <div className={styles.divider}>
+          <span>Or choose a plan</span>
+        </div>
+
         <div className={styles.plansGrid}>
           {plans.map((plan, idx) => (
             <div 
@@ -89,7 +127,8 @@ export default function PricingPage() {
 
               <div className={styles.buttons}>
                 <button
-                  onClick={() => window.location.href = plan.monthly.link}
+                  onClick={() => handlePlanSelect(plan.monthly.link)}
+                  disabled={isLoading}
                   className={`${styles.button} ${styles[`buttonPrimary-${plan.type}`]}`}
                 >
                   <span>Monthly</span>
@@ -97,7 +136,8 @@ export default function PricingPage() {
                 </button>
 
                 <button
-                  onClick={() => window.location.href = plan.yearly.link}
+                  onClick={() => handlePlanSelect(plan.yearly.link)}
+                  disabled={isLoading}
                   className={styles.buttonSecondary}
                 >
                   <div className={styles.yearlyInfo}>
@@ -112,7 +152,7 @@ export default function PricingPage() {
         </div>
 
         <div className={styles.footer}>
-          <p>🎁 All plans include a 3-day free trial • Cancel anytime</p>
+          <p>💳 All paid plans include a 3-day trial • Secure payment • Cancel anytime</p>
         </div>
       </div>
     </div>

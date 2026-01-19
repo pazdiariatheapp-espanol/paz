@@ -1,17 +1,19 @@
 .container {
   min-height: 100vh;
+  min-height: 100dvh;
   height: auto;
   background: linear-gradient(135deg, #0f172a 0%, #581c87 50%, #0f172a 100%);
   padding: 2rem 1rem 3rem;
   position: relative;
   overflow-x: hidden;
-  overflow-y: visible;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .backgroundBlob1,
 .backgroundBlob2,
 .backgroundBlob3 {
-  position: fixed;
+  position: absolute;
   border-radius: 50%;
   filter: blur(60px);
   opacity: 0.2;

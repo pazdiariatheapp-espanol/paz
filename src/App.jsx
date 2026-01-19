@@ -20,7 +20,7 @@ import HealingSounds from './pages/HealingSounds'
 // Components
 import Layout from './components/Layout'
 import AdBanner from './components/AdBanner'
-import ChatBot from './components/ChatBot'
+import AIChatBot from './components/AIChatBot'
 
 function App() {
   const { user, setUser, showAds, theme } = useStore()
@@ -100,7 +100,7 @@ function App() {
       {user && showAds() && <AdBanner />}
       
       {/* Floating chat bot */}
-      {user && <ChatBot />}
+      {user && <AIChatBot />}
     </BrowserRouter>
   )
 }

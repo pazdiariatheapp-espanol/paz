@@ -73,40 +73,45 @@ export default function AIChatBot() {
     return CRISIS_KEYWORDS.some(keyword => lowerText.includes(keyword));
   };
 
-  // Text-to-speech
+  // Text-to-speech with natural voice
   const speak = (text) => {
     if (!voiceEnabled) return;
     
     window.speechSynthesis.cancel();
-    const setVoice = () =>  {
-      const utterance = new SpeechSynthesisUtterance (text);
+    
+    const setVoice = () => {
+      const utterance = new SpeechSynthesisUtterance(text);
       const voices = window.speechSynthesis.getVoices();
-
-      const preferredVoice = voices.find(voice =>)
-        voice.name.includes('Samantha') || 
-        voice.name.includes('Google US English') ||
-        voice.name.includes('Microsoft Zira') ||
-        voice.name.includes('Karen') ||
-        voice.land.includes('en') && voice.name.includes('Female'))
-    ) || voices.find(voice => voice.land.includes('en-US'));
-  if (preferredVoice) {
+      
+      // Try to find a natural English voice
+      const preferredVoice = voices.find(voice => {
+        return voice.name.includes('Samantha') || 
+               voice.name.includes('Google US English') ||
+               voice.name.includes('Microsoft Zira') ||
+               voice.name.includes('Karen') ||
+               (voice.lang.includes('en') && voice.name.includes('Female'));
+      }) || voices.find(voice => voice.lang.includes('en-US'));
+      
+      if (preferredVoice) {
         utterance.voice = preferredVoice;
-  }
-
-      utterance.rate = 0.9;
-    utterance.pitch = 1.05;
-    utterance.volume = 1;
+      }
+      
+      utterance.rate = 0.95;
+      utterance.pitch = 1.05;
+      utterance.volume = 1;
+      
+      utterance.onstart = () => setIsSpeaking(true);
+      utterance.onend = () => setIsSpeaking(false);
+      
+      window.speechSynthesis.speak(utterance);
+    };
     
-    utterance.onstart = () => setIsSpeaking(true);
-    utterance.onend = () => setIsSpeaking(false);
-    
-    window.speechSynthesis.speak(utterance);
-  };
-  if (window.speechSynthesis.getVoices().lenght > 0) {
-    setVoice();
-  } else {
-    window.speechSynthesis.onvoiceschanged = setVoice;
-  }
+    // Ensure voices are loaded
+    if (window.speechSynthesis.getVoices().length > 0) {
+      setVoice();
+    } else {
+      window.speechSynthesis.onvoiceschanged = setVoice;
+    }
   };
 
   // Start voice input

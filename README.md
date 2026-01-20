@@ -232,3 +232,4 @@ MIT License - feel free to use for your own projects!
 Made with 💙 for mental wellness
 
 **Questions?** Open an issue or reach out!
+# AI Chatbot added

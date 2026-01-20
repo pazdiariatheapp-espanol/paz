@@ -78,15 +78,35 @@ export default function AIChatBot() {
     if (!voiceEnabled) return;
     
     window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.rate = 0.9;
-    utterance.pitch = 1;
+    const setVoice = () =>  {
+      const utterance = new SpeechSynthesisUtterance (text);
+      const voices = window.speechSynthesis.getVoices();
+
+      const preferredVoice = voices.find(voice =>)
+        voice.name.includes('Samantha') || 
+        voice.name.includes('Google US English') ||
+        voice.name.includes('Microsoft Zira') ||
+        voice.name.includes('Karen') ||
+        voice.land.includes('en') && voice.name.includes('Female'))
+    ) || voices.find(voice => voice.land.includes('en-US'));
+  if (preferredVoice) {
+        utterance.voice = preferredVoice;
+  }
+
+      utterance.rate = 0.9;
+    utterance.pitch = 1.05;
     utterance.volume = 1;
     
     utterance.onstart = () => setIsSpeaking(true);
     utterance.onend = () => setIsSpeaking(false);
     
     window.speechSynthesis.speak(utterance);
+  };
+  if (window.speechSynthesis.getVoices().lenght > 0) {
+    setVoice();
+  } else {
+    window.speechSynthesis.onvoiceschanged = setVoice;
+  }
   };
 
   // Start voice input

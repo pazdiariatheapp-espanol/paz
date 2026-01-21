@@ -1,3 +1,4 @@
+// Updated Gemini logic
 import React, { useState, useEffect, useRef } from 'react';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { Brain, Send, Mic, Volume2, VolumeX, X, AlertCircle } from 'lucide-react';

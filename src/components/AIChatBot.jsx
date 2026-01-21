@@ -147,7 +147,25 @@ export default function AIChatBot() {
     setIsLoading(true);
 
     try {
-      const model = genAI.current.getGenerativeModel({ model: 'gemini-1.5-pro-latest' });
+      // Try different models until one works
+      const modelNames = ['gemini-1.5-flash', 'gemini-1.5-pro', 'gemini-pro'];
+      let model = null;
+      let lastError = null;
+
+      for (const modelName of modelNames) {
+        try {
+          model = genAI.current.getGenerativeModel({ model: modelName });
+          console.log(`Using model: ${modelName}`);
+          break;
+        } catch (e) {
+          console.log(`Model ${modelName} failed, trying next...`);
+          lastError = e;
+        }
+      }
+
+      if (!model) {
+        throw lastError || new Error('No Gemini model available');
+      }
       
       const systemPrompt = `You are a compassionate mental health support AI for the Paz app. Your role is to:
 - Provide emotional support and active listening

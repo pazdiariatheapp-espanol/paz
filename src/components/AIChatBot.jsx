@@ -3,10 +3,7 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 import { Brain, Send, Mic, Volume2, VolumeX, X, AlertCircle } from 'lucide-react';
 import styles from './AIChatBot.module.css';
 
-const CRISIS_KEYWORDS = [
-  'suicide', 'kill myself', 'end my life', 'want to die', 'better off dead',
-  'no reason to live', 'can\'t go on', 'hurt myself', 'self harm'
-];
+const CRISIS_KEYWORDS = ['suicide', 'kill myself', 'end my life', 'want to die', 'better off dead', 'hurt myself', 'self harm'];
 
 export default function AIChatBot() {
   const [isOpen, setIsOpen] = useState(false);
@@ -22,39 +19,19 @@ export default function AIChatBot() {
   const recognitionRef = useRef(null);
   const genAI = useRef(null);
 
-  // Initialize Gemini
   useEffect(() => {
+    // VITE_ prefix is mandatory for Vite apps to expose keys to the client
     const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
     if (apiKey) {
       genAI.current = new GoogleGenerativeAI(apiKey);
     } else {
-      console.error("Gemini API Key not found. Check your .env file and restart your server.");
+      console.warn("API Key missing. Ensure VITE_GEMINI_API_KEY is set in .env or Vercel.");
     }
   }, []);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
-
-  // Speech Recognition Setup
-  useEffect(() => {
-    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-      recognitionRef.current = new SpeechRecognition();
-      recognitionRef.current.continuous = false;
-      recognitionRef.current.onresult = (event) => {
-        setInput(event.results[0][0].transcript);
-        setIsListening(false);
-      };
-      recognitionRef.current.onerror = () => setIsListening(false);
-      recognitionRef.current.onend = () => setIsListening(false);
-    }
-  }, []);
-
-  const detectCrisis = (text) => {
-    const lowerText = text.toLowerCase();
-    return CRISIS_KEYWORDS.some(keyword => lowerText.includes(keyword));
-  };
 
   const speak = (text) => {
     if (!voiceEnabled) return;
@@ -65,65 +42,55 @@ export default function AIChatBot() {
     window.speechSynthesis.speak(utterance);
   };
 
-  const startListening = () => {
-    if (recognitionRef.current && !isListening) {
-      setIsListening(true);
-      recognitionRef.current.start();
-    }
-  };
-
-  // MAIN FIX: Improved Send Message Logic
   const sendMessage = async () => {
     if (!input.trim() || isLoading || !genAI.current) return;
 
     const userMessage = input.trim();
     setInput('');
-    
-    // Add user message to UI immediately
-    const updatedMessages = [...messages, { role: 'user', content: userMessage }];
-    setMessages(updatedMessages);
+    const newMessages = [...messages, { role: 'user', content: userMessage }];
+    setMessages(newMessages);
 
-    if (detectCrisis(userMessage)) {
+    if (CRISIS_KEYWORDS.some(k => userMessage.toLowerCase().includes(k))) {
       setShowCrisisAlert(true);
     }
 
     setIsLoading(true);
 
-    try {
-      // Initialize model with System Instructions
-      const model = genAI.current.getGenerativeModel({ 
-        model: "gemini-1.5-flash",
-        systemInstruction: "You are a compassionate mental health support AI for the Paz app. Provide warm, empathetic, non-judgmental, and concise (2-3 sentences) support. Never provide medical diagnoses. If crisis is detected, emphasize contacting a professional immediately."
-      });
+    // List of models to try in order of preference
+    const modelOptions = ["gemini-2.0-flash", "gemini-1.5-flash"];
+    let success = false;
 
-      // Prepare history (excluding the message we are about to send)
-      const chatHistory = messages.slice(-10).map(msg => ({
-        role: msg.role === 'user' ? 'user' : 'model',
-        parts: [{ text: msg.content }]
-      }));
+    for (const modelName of modelOptions) {
+      if (success) break;
+      try {
+        const model = genAI.current.getGenerativeModel({ 
+          model: modelName,
+          systemInstruction: "You are a compassionate mental health support AI for the Paz app. Keep responses concise (2-3 sentences). Never provide medical advice."
+        });
 
-      const chat = model.startChat({
-        history: chatHistory,
-        generationConfig: {
-          maxOutputTokens: 200,
-          temperature: 0.7,
-        },
-      });
+        // Gemini history requires alternating roles: 'user' and 'model'
+        const chatHistory = messages.slice(-6).map(msg => ({
+          role: msg.role === 'user' ? 'user' : 'model',
+          parts: [{ text: msg.content }]
+        }));
 
-      const result = await chat.sendMessage(userMessage);
-      const responseText = result.response.text();
+        const chat = model.startChat({ history: chatHistory });
+        const result = await chat.sendMessage(userMessage);
+        const responseText = result.response.text();
 
-      // Add AI response to UI
-      setMessages(prev => [...prev, { role: 'assistant', content: responseText }]);
-      speak(responseText);
-
-    } catch (error) {
-      console.error('Gemini Error:', error);
-      const errorMsg = "I'm having trouble connecting. Please check your API key and internet connection.";
-      setMessages(prev => [...prev, { role: 'assistant', content: errorMsg }]);
-    } finally {
-      setIsLoading(false);
+        setMessages(prev => [...prev, { role: 'assistant', content: responseText }]);
+        speak(responseText);
+        success = true;
+      } catch (error) {
+        console.error(`Failed with ${modelName}:`, error);
+        // If it's the last model and it fails, show the user error
+        if (modelName === modelOptions[modelOptions.length - 1]) {
+          const errorMsg = "I'm having a connection issue. Please try again in a moment.";
+          setMessages(prev => [...prev, { role: 'assistant', content: errorMsg }]);
+        }
+      }
     }
+    setIsLoading(false);
   };
 
   const handleKeyPress = (e) => {
@@ -148,52 +115,17 @@ export default function AIChatBot() {
               <Brain size={24} className={styles.brainIcon} />
               <div>
                 <h3 className={styles.title}>Paz AI</h3>
-                <p className={styles.subtitle}>Your mental health companion</p>
+                <p className={styles.subtitle}>Companion</p>
               </div>
             </div>
-            <div className={styles.headerRight}>
-              <button onClick={() => setVoiceEnabled(!voiceEnabled)} className={styles.iconButton}>
-                {voiceEnabled ? <Volume2 size={20} /> : <VolumeX size={20} />}
-              </button>
-              <button onClick={() => setIsOpen(false)} className={styles.iconButton}>
-                <X size={20} />
-              </button>
-            </div>
+            <button onClick={() => setIsOpen(false)} className={styles.iconButton}><X size={20} /></button>
           </div>
 
-          {showCrisisAlert && (
-            <div className={styles.crisisAlert}>
-              <AlertCircle size={20} />
-              <div className={styles.crisisContent}>
-                <strong>Need immediate help?</strong>
-                <p>US/Canada: 988 | UK: 116 123</p>
-              </div>
-              <button onClick={() => setShowCrisisAlert(false)} className={styles.closeAlert}>
-                <X size={16} />
-              </button>
-            </div>
-          )}
-
           <div className={styles.messages}>
-            {messages.length === 0 && (
-              <div className={styles.welcome}>
-                <Brain size={48} className={styles.welcomeBrain} />
-                <h4>Welcome to Paz AI</h4>
-                <p>How are you feeling today?</p>
-              </div>
-            )}
-            
             {messages.map((msg, idx) => (
-              <div key={idx} className={`${styles.message} ${styles[msg.role]}`}>
-                {msg.content}
-              </div>
+              <div key={idx} className={`${styles.message} ${styles[msg.role]}`}>{msg.content}</div>
             ))}
-            
-            {isLoading && (
-              <div className={`${styles.message} ${styles.assistant}`}>
-                <div className={styles.typing}><span></span><span></span><span></span></div>
-              </div>
-            )}
+            {isLoading && <div className={`${styles.message} ${styles.assistant}`}>Thinking...</div>}
             <div ref={messagesEndRef} />
           </div>
 
@@ -202,19 +134,13 @@ export default function AIChatBot() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyPress}
-              placeholder="Share what's on your mind..."
+              placeholder="How are you?"
               className={styles.input}
               rows={1}
-              disabled={isLoading}
             />
-            <div className={styles.inputButtons}>
-              <button onClick={startListening} className={`${styles.micButton} ${isListening ? styles.listening : ''}`} disabled={isLoading}>
-                <Mic size={20} />
-              </button>
-              <button onClick={sendMessage} className={styles.sendButton} disabled={!input.trim() || isLoading}>
-                <Send size={20} />
-              </button>
-            </div>
+            <button onClick={sendMessage} className={styles.sendButton} disabled={!input.trim() || isLoading}>
+              <Send size={20} />
+            </button>
           </div>
         </div>
       )}

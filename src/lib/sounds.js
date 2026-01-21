@@ -1,18 +1,22 @@
 // Sound utility for Paz app
-// Using free sounds from CDN
+// Updated to use local high-quality files in public/sounds/
 
 const SOUNDS = {
-  // Welcome - soft bells chime
-  welcome: 'https://assets.mixkit.co/active_storage/sfx/2515/2515-preview.mp3',
+  // UI & Welcome
+  welcome: '/sounds/7th Crown 963Hz_.mp3',
+  success: '/sounds/6th Third Eye 852 Hz_.mp3',
   
-  // Breathing exercise sounds - nature loops
-  relaxing: 'https://assets.mixkit.co/active_storage/sfx/1252/1252-preview.mp3', // Gentle rain
-  energizing: 'https://assets.mixkit.co/active_storage/sfx/2827/2827-preview.mp3', // Fireplace crackling
-  box: 'https://assets.mixkit.co/active_storage/sfx/189/189-preview.mp3', // Ocean waves
-  sleep: 'https://assets.mixkit.co/active_storage/sfx/1251/1251-preview.mp3', // Night crickets
-  
-  // UI sounds
-  success: 'https://assets.mixkit.co/active_storage/sfx/2190/2190-preview.mp3',
+  // Breathing exercise sounds (Nature Loops)
+  relaxing: '/sounds/Forest birds_.mp3',
+  energizing: '/sounds/Gentle Wind_.mp3',
+  box: '/sounds/Ocean waves_.mp3',
+  sleep: '/sounds/Night Crickets_.mp3',
+
+  // Chakra Frequencies (New!)
+  throat: '/sounds/5th Throat 741Hz_.mp3',
+  heart: '/sounds/4th Heart 639 Hz_ .mp3',
+  solar: '/sounds/3rd Solar plexus_528 Hz_.mp3',
+  sacral: '/sounds/2nd Sacral 417 Hz_.mp3'
 }
 
 class SoundManager {
@@ -55,10 +59,8 @@ class SoundManager {
     
     const sound = this.sounds[soundName]
     if (sound) {
-      // Reset and play
       sound.currentTime = 0
       sound.play().catch(err => {
-        // Browser may block autoplay - that's okay
         console.log('Sound blocked by browser:', err.message)
       })
     }
@@ -67,7 +69,6 @@ class SoundManager {
   playLoop(soundName) {
     if (!this.enabled) return
     
-    // Stop any current loop
     this.stopLoop()
     
     const sound = this.sounds[soundName]
@@ -90,7 +91,6 @@ class SoundManager {
     }
   }
   
-  // Fade out loop over duration (ms)
   fadeOutLoop(duration = 1000) {
     if (!this.currentLoop) return
     
@@ -108,7 +108,7 @@ class SoundManager {
       if (currentStep >= steps) {
         clearInterval(fadeInterval)
         this.stopLoop()
-        sound.volume = this.volume // Reset volume for next play
+        sound.volume = this.volume 
       }
     }, stepTime)
   }
@@ -125,4 +125,8 @@ export const SOUND_NAMES = {
   BOX: 'box',
   SLEEP: 'sleep',
   SUCCESS: 'success',
+  THROAT: 'throat',
+  HEART: 'heart',
+  SOLAR: 'solar',
+  SACRAL: 'sacral'
 }

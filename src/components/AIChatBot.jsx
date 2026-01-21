@@ -1,4 +1,3 @@
-// Updated Gemini logic
 import React, { useState, useEffect, useRef } from 'react';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { Brain, Send, Mic, Volume2, VolumeX, X, AlertCircle } from 'lucide-react';
@@ -12,21 +11,17 @@ export default function AIChatBot() {
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isListening, setIsListening] = useState(false);
-  const [isSpeaking, setIsSpeaking] = useState(false);
   const [voiceEnabled, setVoiceEnabled] = useState(true);
   const [showCrisisAlert, setShowCrisisAlert] = useState(false);
   
   const messagesEndRef = useRef(null);
-  const recognitionRef = useRef(null);
   const genAI = useRef(null);
+  const audioRef = useRef(null); // Ref to manage the current AI voice playing
 
   useEffect(() => {
-    // VITE_ prefix is mandatory for Vite apps to expose keys to the client
     const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
     if (apiKey) {
       genAI.current = new GoogleGenerativeAI(apiKey);
-    } else {
-      console.warn("API Key missing. Ensure VITE_GEMINI_API_KEY is set in .env or Vercel.");
     }
   }, []);
 
@@ -34,13 +29,18 @@ export default function AIChatBot() {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  const speak = (text) => {
-    if (!voiceEnabled) return;
-    window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.onstart = () => setIsSpeaking(true);
-    utterance.onend = () => setIsSpeaking(false);
-    window.speechSynthesis.speak(utterance);
+  // NEW: Play high-quality Native AI Audio
+  const playAIVoice = (base64Audio) => {
+    if (!voiceEnabled || !base64Audio) return;
+    
+    // Stop any current speaking
+    if (audioRef.current) {
+      audioRef.current.pause();
+    }
+
+    const audioUrl = `data:audio/wav;base64,${base64Audio}`;
+    audioRef.current = new Audio(audioUrl);
+    audioRef.current.play().catch(e => console.error("Audio playback failed:", e));
   };
 
   const sendMessage = async () => {
@@ -57,8 +57,8 @@ export default function AIChatBot() {
 
     setIsLoading(true);
 
-    // List of models to try in order of preference
-    const modelOptions = ["gemini-2.0-flash", "gemini-1.5-flash"];
+    // TRY TTS MODEL FIRST for human voice, fallback to standard if needed
+    const modelOptions = ["gemini-2.0-flash-tts", "gemini-2.0-flash"]; 
     let success = false;
 
     for (const modelName of modelOptions) {
@@ -66,28 +66,42 @@ export default function AIChatBot() {
       try {
         const model = genAI.current.getGenerativeModel({ 
           model: modelName,
-          systemInstruction: "You are a compassionate mental health support AI for the Paz app. Keep responses concise (2-3 sentences). Never provide medical advice."
+          systemInstruction: "You are a compassionate mental health guide. Speak with a warm, empathetic, and human-like tone. Keep responses concise (2 sentences)."
         });
 
-        // Gemini history requires alternating roles: 'user' and 'model'
-        const chatHistory = messages.slice(-6).map(msg => ({
-          role: msg.role === 'user' ? 'user' : 'model',
-          parts: [{ text: msg.content }]
-        }));
+        // Config for Native Audio Output
+        const generationConfig = {
+          responseModalities: ["audio"],
+          speechConfig: {
+            voiceConfig: { prebuiltVoiceConfig: { voiceName: "Vindemiatrix" } } // Calm healing voice
+          }
+        };
 
-        const chat = model.startChat({ history: chatHistory });
-        const result = await chat.sendMessage(userMessage);
+        const chat = model.startChat({
+          history: messages.slice(-6).map(msg => ({
+            role: msg.role === 'user' ? 'user' : 'model',
+            parts: [{ text: msg.content }]
+          }))
+        });
+
+        // Generate content with Audio config
+        const result = await chat.sendMessage(userMessage, generationConfig);
+        
+        // Extract Text and Audio
         const responseText = result.response.text();
-
+        const audioPart = result.response.candidates[0].content.parts.find(p => p.inlineData);
+        
         setMessages(prev => [...prev, { role: 'assistant', content: responseText }]);
-        speak(responseText);
+        
+        if (audioPart) {
+          playAIVoice(audioPart.inlineData.data);
+        }
+        
         success = true;
       } catch (error) {
         console.error(`Failed with ${modelName}:`, error);
-        // If it's the last model and it fails, show the user error
         if (modelName === modelOptions[modelOptions.length - 1]) {
-          const errorMsg = "I'm having a connection issue. Please try again in a moment.";
-          setMessages(prev => [...prev, { role: 'assistant', content: errorMsg }]);
+          setMessages(prev => [...prev, { role: 'assistant', content: "I'm having a connection issue. Please try again." }]);
         }
       }
     }
@@ -119,7 +133,15 @@ export default function AIChatBot() {
                 <p className={styles.subtitle}>Companion</p>
               </div>
             </div>
-            <button onClick={() => setIsOpen(false)} className={styles.iconButton}><X size={20} /></button>
+            <div className={styles.headerRight}>
+               <button 
+                onClick={() => setVoiceEnabled(!voiceEnabled)} 
+                className={styles.iconButton}
+              >
+                {voiceEnabled ? <Volume2 size={20} /> : <VolumeX size={20} />}
+              </button>
+              <button onClick={() => setIsOpen(false)} className={styles.iconButton}><X size={20} /></button>
+            </div>
           </div>
 
           <div className={styles.messages}>

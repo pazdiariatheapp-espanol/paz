@@ -3,12 +3,12 @@
 
 const SOUNDS = {
   // Nature & Meditation Loops
-  rain: '/sounds/GentleRain.mp3',
-  forest: '/sounds/ForestBirds.mp3',
-  wind: '/sounds/GentleWind.mp3',
-  waves: '/sounds/OceanWaves.mp3',
-  crickets: '/sounds/NightCrickets.mp3',
-  fireplace: '/sounds/Fireplace.mp3',
+  gentlerain: '/sounds/gentlerain.mp3',
+  forestbirds: '/sounds/forestbirds.mp3',
+  gentlewind: '/sounds/gentlewind.mp3',
+  oceanwaves: '/sounds/oceanwaves.mp3',
+  nightcrickets: '/sounds/nightcrickets.mp3',
+  fireplace: '/sounds/fireplace.mp3',
 
   // Chakra Frequencies (matching your actual files)
   crown: '/sounds/7th-Crown-963Hz.mp3',
@@ -17,7 +17,7 @@ const SOUNDS = {
   heart: '/sounds/4th-Heart-639Hz.mp3',
   solar: '/sounds/3rd-Solar-528Hz.mp3',
   sacral: '/sounds/2nd-Sacral-417Hz.mp3',
-  root: '/sounds/1st-Crown-393Hz.mp3',  // FIXED: This is your actual filename
+  root: '/sounds/1st-Crown-396Hz.mp3',  // FIXED: This is your actual filename
 
   // UI Sounds
   welcome: '/sounds/7th-Crown-963Hz.mp3',
@@ -111,11 +111,11 @@ export const soundManager = new SoundManager()
 
 // FIXED: Export names that match the SOUNDS keys above
 export const SOUND_NAMES = {
-  RAIN: 'rain',
-  FOREST: 'forest',
-  WIND: 'wind',
-  WAVES: 'waves',
-  CRICKETS: 'crickets',
+  GENTLERAIN: 'gentlerain',
+  FORESTBIRDS: 'forestbirds',
+  GENTLEWIND: 'gentlewind',
+  OCEANWAVES: 'oceanwaves',
+  NIGHTCRICKETS: 'nightcrickets',
   FIREPLACE: 'fireplace',
   CROWN: 'crown',
   THIRDEYE: 'thirdeye',

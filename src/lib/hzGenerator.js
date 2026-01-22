@@ -126,25 +126,25 @@ export const HEALING_SOUNDS = {
     title: { en: 'Chakra Frequencies', es: 'Frecuencias de Chakras' },
     subtitle: { en: 'Balance your energy centers', es: 'Equilibra tus centros de energía' },
     sounds: [
-      { id: 'root', localPath: '/sounds/1st-Root-393Hz.mp3', label: '396Hz', name: { en: '1st - Root', es: '1° - Raíz' }, icon: '🔴', color: '#ef4444' },
-      { id: 'sacral', localPath: '/sounds/2nd-Sacral-417Hz.mp3', label: '417Hz', name: { en: '2nd - Sacral', es: '2° - Sacro' }, icon: '🟠', color: '#f97316' },
-      { id: 'solar', localPath: '/sounds/3rd-Solar-528Hz.mp3', label: '528Hz', name: { en: '3rd - Solar Plexus', es: '3° - Plexo Solar' }, icon: '🟡', color: '#eab308' },
-      { id: 'heart', localPath: '/sounds/4th-Heart-639Hz.mp3', label: '639Hz', name: { en: '4th - Heart', es: '4° - Corazón' }, icon: '💚', color: '#22c55e' },
-      { id: 'throat', localPath: '/sounds/5th-Throat-741Hz.mp3', label: '741Hz', name: { en: '5th - Throat', es: '5° - Garganta' }, icon: '🔵', color: '#3b82f6' },
-      { id: 'third_eye', localPath: '/sounds/6th-ThirdEye-852Hz.mp3', label: '852Hz', name: { en: '6th - Third Eye', es: '6° - Tercer Ojo' }, icon: '💜', color: '#8b5cf6' },
-      { id: 'crown', localPath: '/sounds/7th-Crown-963Hz.mp3', label: '963Hz', name: { en: '7th - Crown', es: '7° - Corona' }, icon: '⚪', color: '#a855f7' },
+      { id: 'root', localPath: '/sounds/1st-root-396Hz.mp3', label: '396Hz', name: { en: '1st - Root', es: '1° - Raíz' }, icon: '🔴', color: '#ef4444' },
+      { id: 'sacral', localPath: '/sounds/2nd-sacral-417Hz.mp3', label: '417Hz', name: { en: '2nd - Sacral', es: '2° - Sacro' }, icon: '🟠', color: '#f97316' },
+      { id: 'solar', localPath: '/sounds/3rd-solar-528Hz.mp3', label: '528Hz', name: { en: '3rd - Solar Plexus', es: '3° - Plexo Solar' }, icon: '🟡', color: '#eab308' },
+      { id: 'heart', localPath: '/sounds/4th-heart-639Hz.mp3', label: '639Hz', name: { en: '4th - Heart', es: '4° - Corazón' }, icon: '💚', color: '#22c55e' },
+      { id: 'throat', localPath: '/sounds/5th-throat-741Hz.mp3', label: '741Hz', name: { en: '5th - Throat', es: '5° - Garganta' }, icon: '🔵', color: '#3b82f6' },
+      { id: 'thirdeye', localPath: '/sounds/6th-thirdeye-852Hz.mp3', label: '852Hz', name: { en: '6th - Third Eye', es: '6° - Tercer Ojo' }, icon: '💜', color: '#8b5cf6' },
+      { id: 'crown', localPath: '/sounds/7th-crown-963Hz.mp3', label: '963Hz', name: { en: '7th - Crown', es: '7° - Corona' }, icon: '⚪', color: '#a855f7' },
     ]
   },
   nature: {
     title: { en: 'Nature & ASMR', es: 'Naturaleza y ASMR' },
     subtitle: { en: 'Relaxing ambient sounds', es: 'Sonidos ambientales relajantes' },
     sounds: [
-      { id: 'rain', localPath: '/sounds/GentleRain.mp3', name: { en: 'Gentle Rain', es: 'Lluvia Suave' }, icon: '🌧️' },
-      { id: 'waves', localPath: '/sounds/OceanWaves.mp3', name: { en: 'Ocean Waves', es: 'Olas del Mar' }, icon: '🌊' },
-      { id: 'fireplace', localPath: '/sounds/Fireplace.mp3', name: { en: 'Fireplace', es: 'Chimenea' }, icon: '🔥' },
-      { id: 'crickets', localPath: '/sounds/NightCrickets.mp3', name: { en: 'Grillos Nocturnos', es: 'Grillos Nocturnos' }, icon: '🦗' },
-      { id: 'forest', localPath: '/sounds/ForestBirds.mp3', name: { en: 'Forest Birds', es: 'Pájaros del Bosque' }, icon: '🌲' },
-      { id: 'wind', localPath: '/sounds/GentleWind.mp3', name: { en: 'Gentle Wind', es: 'Viento Suave' }, icon: '💨' },
+      { id: 'gentlerain', localPath: '/sounds/gentlerain.mp3', name: { en: 'Gentle rain', es: 'Lluvia Suave' }, icon: '🌧️' },
+      { id: 'oceanWaves', localPath: '/sounds/oceanwaves.mp3', name: { en: 'Ocean waves', es: 'Olas del Mar' }, icon: '🌊' },
+      { id: 'fireplace', localPath: '/sounds/fireplace.mp3', name: { en: 'Fireplace', es: 'Chimenea' }, icon: '🔥' },
+      { id: 'nightcrickets', localPath: '/sounds/nightcrickets.mp3', name: { en: 'Grillos nocturnos', es: 'Grillos Nocturnos' }, icon: '🦗' },
+      { id: 'forestbirds', localPath: '/sounds/forestbirds.mp3', name: { en: 'Forest Birds', es: 'Pájaros del Bosque' }, icon: '🌲' },
+      { id: 'gentlewind', localPath: '/sounds/gentlewind.mp3', name: { en: 'Gentle Wind', es: 'Viento Suave' }, icon: '💨' },
     ]
   }
 }

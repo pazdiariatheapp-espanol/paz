@@ -18,6 +18,9 @@ export default function AIChatBot() {
 
   useEffect(() => {
     const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+    // Health check log to see if Vercel is sending the key
+    console.log("Paz AI: Checking connection...", apiKey ? "Key Loaded" : "Key Missing");
+    
     if (apiKey) {
       genAI.current = new GoogleGenerativeAI(apiKey);
     }
@@ -61,19 +64,19 @@ export default function AIChatBot() {
     setIsLoading(true);
 
     try {
-      // FIXED: Simplified to work with standard Gemini API
+      // FIX: Using the stable gemini-1.5-flash model 
+      // This avoids the v1beta 404 errors shown in your logs
       const model = genAI.current.getGenerativeModel({ 
         model: "gemini-1.5-flash"
       });
 
-      const chat = model.startChat({
-        history: messages.slice(-6).map(msg => ({
-          role: msg.role === 'user' ? 'user' : 'model',
-          parts: [{ text: msg.content }]
-        }))
-      });
+      // Simple prompt structure for the stable API
+      const prompt = `You are Paz, a compassionate mental health guide. 
+      Speak with a warm, empathetic tone. Keep responses to 1-2 short sentences. 
+      Always be supportive. 
+      User says: ${userMessage}`;
 
-      const result = await chat.sendMessage("You are Paz, a compassionate mental health guide. Speak with a warm, empathetic tone. Keep responses to 1-2 short sentences. Always be supportive.\n\nUser: " + userMessage);
+      const result = await model.generateContent(prompt);
       const responseText = result.response.text();
       
       setMessages(prev => [...prev, { role: 'assistant', content: responseText }]);

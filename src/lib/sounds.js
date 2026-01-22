@@ -2,21 +2,24 @@
 // Updated to use local high-quality files in public/sounds/
 
 const SOUNDS = {
-  // UI & Welcome
-  welcome: '/sounds/7th Crown 963Hz_.mp3',
-  success: '/sounds/6th Third Eye 852 Hz_.mp3',
-  
-  // Breathing exercise sounds (Nature Loops)
+  // Nature & Meditation Loops (Used in Breathe/Home)
   relaxing: '/sounds/Forest birds_.mp3',
   energizing: '/sounds/Gentle Wind_.mp3',
   box: '/sounds/Ocean waves_.mp3',
   sleep: '/sounds/Night Crickets_.mp3',
+  fireplace: '/sounds/Fireplace_.mp3',
 
-  // Chakra Frequencies (New!)
+  // Chakra Frequencies (Specific Healing Sounds)
+  crown: '/sounds/7th Crown 963Hz_.mp3',
+  thirdeye: '/sounds/6th Third Eye 852 Hz_.mp3',
   throat: '/sounds/5th Throat 741Hz_.mp3',
   heart: '/sounds/4th Heart 639 Hz_ .mp3',
   solar: '/sounds/3rd Solar plexus_528 Hz_.mp3',
-  sacral: '/sounds/2nd Sacral 417 Hz_.mp3'
+  sacral: '/sounds/2nd Sacral 417 Hz_.mp3',
+
+  // UI Sounds (Assigning specific frequencies to app actions)
+  welcome: '/sounds/7th Crown 963Hz_.mp3',
+  success: '/sounds/6th Third Eye 852 Hz_.mp3'
 }
 
 class SoundManager {
@@ -25,8 +28,6 @@ class SoundManager {
     this.currentLoop = null
     this.enabled = true
     this.volume = 0.5
-    
-    // Preload sounds
     this.preload()
   }
   
@@ -56,28 +57,21 @@ class SoundManager {
   
   play(soundName) {
     if (!this.enabled) return
-    
     const sound = this.sounds[soundName]
     if (sound) {
       sound.currentTime = 0
-      sound.play().catch(err => {
-        console.log('Sound blocked by browser:', err.message)
-      })
+      sound.play().catch(err => console.warn('Autoplay prevented:', err.message))
     }
   }
   
   playLoop(soundName) {
     if (!this.enabled) return
-    
     this.stopLoop()
-    
     const sound = this.sounds[soundName]
     if (sound) {
       sound.loop = true
       sound.currentTime = 0
-      sound.play().catch(err => {
-        console.log('Sound blocked by browser:', err.message)
-      })
+      sound.play().catch(err => console.warn('Loop prevented:', err.message))
       this.currentLoop = sound
     }
   }
@@ -93,18 +87,15 @@ class SoundManager {
   
   fadeOutLoop(duration = 1000) {
     if (!this.currentLoop) return
-    
     const sound = this.currentLoop
     const startVolume = sound.volume
     const steps = 20
     const stepTime = duration / steps
     const volumeStep = startVolume / steps
-    
     let currentStep = 0
     const fadeInterval = setInterval(() => {
       currentStep++
       sound.volume = Math.max(0, startVolume - (volumeStep * currentStep))
-      
       if (currentStep >= steps) {
         clearInterval(fadeInterval)
         this.stopLoop()
@@ -114,19 +105,20 @@ class SoundManager {
   }
 }
 
-// Create singleton instance
 export const soundManager = new SoundManager()
 
-// Export sound names for easy access
 export const SOUND_NAMES = {
-  WELCOME: 'welcome',
   RELAXING: 'relaxing',
   ENERGIZING: 'energizing',
   BOX: 'box',
   SLEEP: 'sleep',
-  SUCCESS: 'success',
+  FIREPLACE: 'fireplace',
+  CROWN: 'crown',
+  THIRDEYE: 'thirdeye',
   THROAT: 'throat',
   HEART: 'heart',
   SOLAR: 'solar',
-  SACRAL: 'sacral'
+  SACRAL: 'sacral',
+  WELCOME: 'welcome',
+  SUCCESS: 'success'
 }

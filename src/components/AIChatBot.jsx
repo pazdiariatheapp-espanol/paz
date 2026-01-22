@@ -12,13 +12,15 @@ export default function AIChatBot() {
   const [isLoading, setIsLoading] = useState(false);
   const [voiceEnabled, setVoiceEnabled] = useState(true);
   
+  // Detect current language (matching your translation.js logic)
+  const currentLang = localStorage.getItem('paz_language') || 'en';
+
   const messagesEndRef = useRef(null);
   const genAI = useRef(null);
   const audioRef = useRef(null);
 
   useEffect(() => {
     const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
-    // Health check log to see if Vercel is sending the key
     console.log("Paz AI: Checking connection...", apiKey ? "Key Loaded" : "Key Missing");
     
     if (apiKey) {
@@ -38,11 +40,14 @@ export default function AIChatBot() {
     const utterance = new SpeechSynthesisUtterance(text);
     const voices = window.speechSynthesis.getVoices();
     
-    const preferredVoice = voices.find(voice => 
-      voice.name.includes('Samantha') || 
-      voice.name.includes('Google US English') ||
-      (voice.lang.includes('en') && voice.name.includes('Female'))
-    ) || voices.find(voice => voice.lang.includes('en-US'));
+    // Updated voice selection to pick Spanish or English based on app state
+    const preferredVoice = voices.find(voice => {
+      if (currentLang === 'es') {
+        return voice.lang.includes('es') && (voice.name.includes('Monica') || voice.name.includes('Google'));
+      } else {
+        return voice.name.includes('Samantha') || voice.name.includes('Google US English') || (voice.lang.includes('en') && voice.name.includes('Female'));
+      }
+    }) || voices.find(voice => voice.lang.includes(currentLang));
     
     if (preferredVoice) {
       utterance.voice = preferredVoice;
@@ -64,14 +69,16 @@ export default function AIChatBot() {
     setIsLoading(true);
 
     try {
-      // Use the stable model name
       const model = genAI.current.getGenerativeModel({ 
         model: "gemini-1.5-flash"
       });
 
-      // FIXED: Using backticks for multi-line string and variable injection
+      // BILINGUAL PROMPT: Tells Gemini to use the specific language detected
       const result = await model.generateContent(
-        `You are Paz, a compassionate guide. Keep responses to 1-2 short sentences. 
+        `You are Paz, a compassionate spiritual guide. 
+         The user's preferred language is ${currentLang === 'es' ? 'Spanish' : 'English'}.
+         Please respond ONLY in ${currentLang === 'es' ? 'Spanish' : 'English'}.
+         Keep your response to 1 or 2 warm, helpful sentences.
          User says: ${userMessage}`
       );
      
@@ -82,7 +89,11 @@ export default function AIChatBot() {
       
     } catch (error) {
       console.error("Gemini Error:", error);
-      const fallbackMsg = "I'm here, but I'm having a little trouble with my connection. How can I support you right now?";
+      // Fallback message also responds in the correct language
+      const fallbackMsg = currentLang === 'es' 
+        ? "Estoy aquí, pero tengo un pequeño problema con mi conexión. ¿Cómo puedo apoyarte en este momento?"
+        : "I'm here, but I'm having a little trouble with my connection. How can I support you right now?";
+      
       setMessages(prev => [...prev, { role: 'assistant', content: fallbackMsg }]);
       playAIVoice(fallbackMsg);
     }
@@ -112,7 +123,9 @@ export default function AIChatBot() {
               <Brain size={24} className={styles.brainIcon} />
               <div>
                 <h3 className={styles.title}>Paz AI</h3>
-                <p className={styles.subtitle}>Compassionate Guide</p>
+                <p className={styles.subtitle}>
+                  {currentLang === 'es' ? 'Guía Compasivo' : 'Compassionate Guide'}
+                </p>
               </div>
             </div>
             <div className={styles.headerRight}>
@@ -130,7 +143,11 @@ export default function AIChatBot() {
             {messages.map((msg, idx) => (
               <div key={idx} className={`${styles.message} ${styles[msg.role]}`}>{msg.content}</div>
             ))}
-            {isLoading && <div className={`${styles.message} ${styles.assistant}`}>Connecting...</div>}
+            {isLoading && (
+              <div className={`${styles.message} ${styles.assistant}`}>
+                {currentLang === 'es' ? 'Conectando...' : 'Connecting...'}
+              </div>
+            )}
             <div ref={messagesEndRef} />
           </div>
 
@@ -139,7 +156,7 @@ export default function AIChatBot() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyPress}
-              placeholder="Talk to Paz..."
+              placeholder={currentLang === 'es' ? 'Habla con Paz...' : 'Talk to Paz...'}
               className={styles.input}
               rows={1}
             />

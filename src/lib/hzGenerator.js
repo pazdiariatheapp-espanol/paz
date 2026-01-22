@@ -32,6 +32,12 @@ class HzToneGenerator {
 
   // Play a single pure frequency
   playFrequency(hz) {
+    // SAFETY FIX: Stop the "non-finite" crash if hz is missing or not a number
+    if (!hz || isNaN(hz)) {
+      console.log("Not a frequency, skipping electronic tone.");
+      return; 
+    }
+
     this.stop()
     this.init()
 

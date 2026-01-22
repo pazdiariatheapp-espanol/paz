@@ -46,14 +46,20 @@ function HealingSounds() {
     setActiveSound(sound.id)
     setActiveCategory(category)
 
-    if (category === 'binaural') {
-      // Play binaural beat
+    // FIX: Check if the sound has a localPath (MP3 file) first
+    if (sound.localPath) {
+      const audio = new Audio(sound.localPath)
+      audio.loop = true
+      audio.volume = volume / 100
+      audio.play().catch(err => console.log('Audio blocked:', err))
+      natureAudioRef.current = audio
+    } 
+    // Otherwise, fall back to the old generator logic for Binaural or Solfeggio
+    else if (category === 'binaural') {
       hzGenerator.playBinauralBeat(sound.baseHz, sound.hz)
     } else if (category === 'hertz' || category === 'chakra') {
-      // Play pure frequency
       hzGenerator.playFrequency(sound.hz)
-    } else if (category === 'nature') {
-      // Play audio file
+    } else if (category === 'nature' && sound.url) {
       const audio = new Audio(sound.url)
       audio.loop = true
       audio.volume = volume / 100

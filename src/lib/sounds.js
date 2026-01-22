@@ -3,20 +3,23 @@
 
 const SOUNDS = {
   // Nature & Meditation Loops (Used in Breathe/Home)
-  relaxing: '/sounds/ForestBirds.mp3',
-  energizing: '/sounds/GentleWind.mp3',
-  box: '/sounds/OceanWaves.mp3',
-  sleep: '/sounds/NightCrickets.mp3',
+  // nature section - fix the key for rain
+  rain: 'sounds/GentleRain.mp3',
+  forest: '/sounds/ForestBirds.mp3',
+  wind: '/sounds/GentleWind.mp3',
+  waves: '/sounds/OceanWaves.mp3',
+  crickets: '/sounds/NightCrickets.mp3',
   fireplace: '/sounds/Fireplace.mp3',
 
   // Chakra Frequencies (Specific Healing Sounds)
+  // Chakra section - fix root and crown naming
   crown: '/sounds/7th-Crown-963Hz.mp3',
   thirdeye: '/sounds/6th-ThirdEye-852Hz.mp3',
   throat: '/sounds/5th-Throat-741Hz.mp3',
   heart: '/sounds/4th-Heart-639Hz.mp3',
   solar: '/sounds/3rd-Solar-528Hz.mp3',
   sacral: '/sounds/2nd-Sacral-417Hz.mp3',
-  root: '/sounds/1st-Root-396Hz.mp3', // FIXED: Corrected path to 396Hz Root file
+  root: '/sounds/1st-Root-396Hz.mp3', // Point this to the actual Root file
 
   // UI Sounds
   welcome: '/sounds/7th-Crown-963Hz.mp3',

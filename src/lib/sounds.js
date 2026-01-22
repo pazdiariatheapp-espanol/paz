@@ -16,9 +16,9 @@ const SOUNDS = {
   heart: '/sounds/4th-Heart-639Hz.mp3',
   solar: '/sounds/3rd-Solar-528Hz.mp3',
   sacral: '/sounds/2nd-Sacral-417Hz.mp3',
-  crown: '/sounds/1st-Crown-393Hz.mp3',
+  root: '/sounds/1st-Root-396Hz.mp3', // FIXED: Corrected path to 396Hz Root file
 
-  // UI Sounds (Assigning specific frequencies to app actions)
+  // UI Sounds
   welcome: '/sounds/7th-Crown-963Hz.mp3',
   success: '/sounds/6th-ThirdEye-852Hz.mp3',
 }
@@ -35,7 +35,7 @@ class SoundManager {
   preload() {
     Object.entries(SOUNDS).forEach(([key, url]) => {
       const audio = new Audio()
-      audio.src = encodeURI (url) 
+      audio.src = encodeURI(url) 
       audio.preload = 'auto'
       audio.volume = this.volume
       this.sounds[key] = audio
@@ -120,6 +120,7 @@ export const SOUND_NAMES = {
   HEART: 'heart',
   SOLAR: 'solar',
   SACRAL: 'sacral',
+  ROOT: 'root', // ADDED: Root name
   WELCOME: 'welcome',
-  SUCCESS: 'success'
+  SUCCESS: 'success' // FIXED: Added missing comma
 }

@@ -64,19 +64,17 @@ export default function AIChatBot() {
     setIsLoading(true);
 
     try {
-      // FIX: Using the stable gemini-1.5-flash model 
-      // This avoids the v1beta 404 errors shown in your logs
+      // Use the stable model name
       const model = genAI.current.getGenerativeModel({ 
         model: "gemini-1.5-flash"
       });
 
-      // Simple prompt structure for the stable API
-      const prompt = `You are Paz, a compassionate mental health guide. 
-      Speak with a warm, empathetic tone. Keep responses to 1-2 short sentences. 
-      Always be supportive. 
-      User says: ${userMessage}`;
-
-      const result = await model.generateContent(prompt);
+      // FIXED: Using backticks for multi-line string and variable injection
+      const result = await model.generateContent(
+        `You are Paz, a compassionate guide. Keep responses to 1-2 short sentences. 
+         User says: ${userMessage}`
+      );
+     
       const responseText = result.response.text();
       
       setMessages(prev => [...prev, { role: 'assistant', content: responseText }]);

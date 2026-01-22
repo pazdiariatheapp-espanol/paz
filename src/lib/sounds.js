@@ -2,24 +2,22 @@
 // Updated to use local high-quality files in public/sounds/
 
 const SOUNDS = {
-  // Nature & Meditation Loops (Used in Breathe/Home)
-  // nature section - fix the key for rain
-  rain: 'sounds/GentleRain.mp3',
+  // Nature & Meditation Loops
+  rain: '/sounds/GentleRain.mp3',
   forest: '/sounds/ForestBirds.mp3',
   wind: '/sounds/GentleWind.mp3',
   waves: '/sounds/OceanWaves.mp3',
   crickets: '/sounds/NightCrickets.mp3',
   fireplace: '/sounds/Fireplace.mp3',
 
-  // Chakra Frequencies (Specific Healing Sounds)
-  // Chakra section - fix root and crown naming
+  // Chakra Frequencies (matching your actual files)
   crown: '/sounds/7th-Crown-963Hz.mp3',
   thirdeye: '/sounds/6th-ThirdEye-852Hz.mp3',
   throat: '/sounds/5th-Throat-741Hz.mp3',
   heart: '/sounds/4th-Heart-639Hz.mp3',
   solar: '/sounds/3rd-Solar-528Hz.mp3',
   sacral: '/sounds/2nd-Sacral-417Hz.mp3',
-  root: '/sounds/1st-Root-396Hz.mp3', // Point this to the actual Root file
+  root: '/sounds/1st-Crown-393Hz.mp3',  // FIXED: This is your actual filename
 
   // UI Sounds
   welcome: '/sounds/7th-Crown-963Hz.mp3',
@@ -38,7 +36,7 @@ class SoundManager {
   preload() {
     Object.entries(SOUNDS).forEach(([key, url]) => {
       const audio = new Audio()
-      audio.src = encodeURI(url) 
+      audio.src = url  // No need for encodeURI since we removed spaces
       audio.preload = 'auto'
       audio.volume = this.volume
       this.sounds[key] = audio
@@ -111,11 +109,13 @@ class SoundManager {
 
 export const soundManager = new SoundManager()
 
+// FIXED: Export names that match the SOUNDS keys above
 export const SOUND_NAMES = {
-  RELAXING: 'relaxing',
-  ENERGIZING: 'energizing',
-  BOX: 'box',
-  SLEEP: 'sleep',
+  RAIN: 'rain',
+  FOREST: 'forest',
+  WIND: 'wind',
+  WAVES: 'waves',
+  CRICKETS: 'crickets',
   FIREPLACE: 'fireplace',
   CROWN: 'crown',
   THIRDEYE: 'thirdeye',
@@ -123,7 +123,7 @@ export const SOUND_NAMES = {
   HEART: 'heart',
   SOLAR: 'solar',
   SACRAL: 'sacral',
-  ROOT: 'root', // ADDED: Root name
+  ROOT: 'root',
   WELCOME: 'welcome',
-  SUCCESS: 'success' // FIXED: Added missing comma
+  SUCCESS: 'success'
 }

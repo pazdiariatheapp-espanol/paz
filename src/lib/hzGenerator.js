@@ -46,29 +46,24 @@ class HzToneGenerator {
   }
 
   // Play binaural beat (requires headphones for full effect)
-  // Base frequency in left ear, base + beat frequency in right ear
   playBinauralBeat(baseHz, beatHz) {
     this.stop()
     this.init()
 
-    // Create stereo panner for left channel
     const leftPanner = this.audioContext.createStereoPanner()
     leftPanner.pan.value = -1
     leftPanner.connect(this.gainNode)
 
-    // Create stereo panner for right channel
     const rightPanner = this.audioContext.createStereoPanner()
     rightPanner.pan.value = 1
     rightPanner.connect(this.gainNode)
 
-    // Left oscillator (base frequency)
     const leftOsc = this.audioContext.createOscillator()
     leftOsc.type = 'sine'
     leftOsc.frequency.value = baseHz
     leftOsc.connect(leftPanner)
     leftOsc.start()
 
-    // Right oscillator (base + beat frequency)
     const rightOsc = this.audioContext.createOscillator()
     rightOsc.type = 'sine'
     rightOsc.frequency.value = baseHz + beatHz
@@ -79,10 +74,8 @@ class HzToneGenerator {
     this.isPlaying = true
   }
 
-  // Fade out and stop
   stop() {
     if (this.gainNode && this.isPlaying) {
-      // Quick fade out to avoid clicks
       const now = this.audioContext.currentTime
       this.gainNode.gain.setValueAtTime(this.gainNode.gain.value, now)
       this.gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.5)
@@ -111,7 +104,7 @@ export const hzGenerator = new HzToneGenerator()
 
 // Healing frequencies data
 export const HEALING_SOUNDS = {
-  // Binaural Beats (requires headphones)
+  // Binaural Beats
   binaural: {
     title: { en: 'Binaural Beats', es: 'Ritmos Binaurales' },
     subtitle: { en: 'Use headphones for best effect', es: 'Usa audífonos para mejor efecto' },
@@ -134,32 +127,32 @@ export const HEALING_SOUNDS = {
     ]
   },
 
-  // Chakra Frequencies
+  // Chakra Frequencies - UPDATED TO LOCAL MP3 FILES
   chakra: {
     title: { en: 'Chakra Frequencies', es: 'Frecuencias de Chakras' },
     subtitle: { en: 'Balance your energy centers', es: 'Equilibra tus centros de energía' },
     sounds: [
-      { id: 'root', hz: 396, label: '396Hz', name: { en: '1st - Root', es: '1° - Raíz' }, icon: '🔴', color: '#ef4444' },
-      { id: 'sacral', hz: 417, label: '417Hz', name: { en: '2nd - Sacral', es: '2° - Sacro' }, icon: '🟠', color: '#f97316' },
-      { id: 'solar', hz: 528, label: '528Hz', name: { en: '3rd - Solar Plexus', es: '3° - Plexo Solar' }, icon: '🟡', color: '#eab308' },
-      { id: 'heart', hz: 639, label: '639Hz', name: { en: '4th - Heart', es: '4° - Corazón' }, icon: '💚', color: '#22c55e' },
-      { id: 'throat', hz: 741, label: '741Hz', name: { en: '5th - Throat', es: '5° - Garganta' }, icon: '🔵', color: '#3b82f6' },
-      { id: 'third_eye', hz: 852, label: '852Hz', name: { en: '6th - Third Eye', es: '6° - Tercer Ojo' }, icon: '💜', color: '#8b5cf6' },
-      { id: 'crown', hz: 963, label: '963Hz', name: { en: '7th - Crown', es: '7° - Corona' }, icon: '⚪', color: '#a855f7' },
+      { id: 'root', localPath: '/sounds/1st-Root-396Hz_.mp3', label: '396Hz', name: { en: '1st - Root', es: '1° - Raíz' }, icon: '🔴', color: '#ef4444' },
+      { id: 'sacral', localPath: '/sounds/2nd-Sacral-417Hz_.mp3', label: '417Hz', name: { en: '2nd - Sacral', es: '2° - Sacro' }, icon: '🟠', color: '#f97316' },
+      { id: 'solar', localPath: '/sounds/3rd-Solar-528Hz_.mp3', label: '528Hz', name: { en: '3rd - Solar Plexus', es: '3° - Plexo Solar' }, icon: '🟡', color: '#eab308' },
+      { id: 'heart', localPath: '/sounds/4th-Heart-639Hz_.mp3', label: '639Hz', name: { en: '4th - Heart', es: '4° - Corazón' }, icon: '💚', color: '#22c55e' },
+      { id: 'throat', localPath: '/sounds/5th-Throat-741Hz_.mp3', label: '741Hz', name: { en: '5th - Throat', es: '5° - Garganta' }, icon: '🔵', color: '#3b82f6' },
+      { id: 'third_eye', localPath: '/sounds/6th-ThirdEye-852Hz_.mp3', label: '852Hz', name: { en: '6th - Third Eye', es: '6° - Tercer Ojo' }, icon: '💜', color: '#8b5cf6' },
+      { id: 'crown', localPath: '/sounds/7th-Crown-963Hz_.mp3', label: '963Hz', name: { en: '7th - Crown', es: '7° - Corona' }, icon: '⚪', color: '#a855f7' },
     ]
   },
 
-  // Nature/ASMR sounds (URLs)
+  // Nature/ASMR sounds - UPDATED TO LOCAL MP3 FILES
   nature: {
     title: { en: 'Nature & ASMR', es: 'Naturaleza y ASMR' },
     subtitle: { en: 'Relaxing ambient sounds', es: 'Sonidos ambientales relajantes' },
     sounds: [
-      { id: 'rain', url: 'https://assets.mixkit.co/active_storage/sfx/1252/1252-preview.mp3', name: { en: 'Gentle Rain', es: 'Lluvia Suave' }, icon: '🌧️' },
-      { id: 'waves', url: 'https://assets.mixkit.co/active_storage/sfx/189/189-preview.mp3', name: { en: 'Ocean Waves', es: 'Olas del Mar' }, icon: '🌊' },
-      { id: 'fireplace', url: 'https://assets.mixkit.co/active_storage/sfx/2827/2827-preview.mp3', name: { en: 'Fireplace', es: 'Chimenea' }, icon: '🔥' },
-      { id: 'crickets', url: 'https://assets.mixkit.co/active_storage/sfx/1251/1251-preview.mp3', name: { en: 'Night Crickets', es: 'Grillos Nocturnos' }, icon: '🦗' },
-      { id: 'forest', url: 'https://assets.mixkit.co/active_storage/sfx/526/526-preview.mp3', name: { en: 'Forest Birds', es: 'Pájaros del Bosque' }, icon: '🌲' },
-      { id: 'wind', url: 'https://assets.mixkit.co/active_storage/sfx/2432/2432-preview.mp3', name: { en: 'Gentle Wind', es: 'Viento Suave' }, icon: '💨' },
+      { id: 'rain', localPath: '/sounds/GentleRain_.mp3', name: { en: 'Gentle Rain', es: 'Lluvia Suave' }, icon: '🌧️' },
+      { id: 'waves', localPath: '/sounds/OceanWaves_.mp3', name: { en: 'Ocean Waves', es: 'Olas del Mar' }, icon: '🌊' },
+      { id: 'fireplace', localPath: '/sounds/Fireplace_.mp3', name: { en: 'Fireplace', es: 'Chimenea' }, icon: '🔥' },
+      { id: 'crickets', localPath: '/sounds/NightCrickets_.mp3', name: { en: 'Grillos Nocturnos' }, icon: '🦗' },
+      { id: 'forest', localPath: '/sounds/ForestBirds_.mp3', name: { en: 'Forest Birds', es: 'Pájaros del Bosque' }, icon: '🌲' },
+      { id: 'wind', localPath: '/sounds/GentleWind_.mp3', name: { en: 'Gentle Wind', es: 'Viento Suave' }, icon: '💨' },
     ]
   }
 }

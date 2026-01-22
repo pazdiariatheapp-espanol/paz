@@ -17,7 +17,6 @@ class HzToneGenerator {
       this.gainNode.connect(this.audioContext.destination)
       this.gainNode.gain.value = this.volume
     }
-    // Resume if suspended (browser autoplay policy)
     if (this.audioContext.state === 'suspended') {
       this.audioContext.resume()
     }
@@ -30,11 +29,10 @@ class HzToneGenerator {
     }
   }
 
-  // Play a single pure frequency
   playFrequency(hz) {
-    // SAFETY FIX: Stop the "non-finite" crash if hz is missing or not a number
+    // SAFETY FIX: Prevents "non-finite" crashes for buttons without hz numbers
     if (!hz || isNaN(hz)) {
-      console.log("Not a frequency, skipping electronic tone.");
+      console.log("No frequency number provided, skipping tone.");
       return; 
     }
 
@@ -51,7 +49,6 @@ class HzToneGenerator {
     this.isPlaying = true
   }
 
-  // Play binaural beat (requires headphones for full effect)
   playBinauralBeat(baseHz, beatHz) {
     this.stop()
     this.init()
@@ -91,9 +88,7 @@ class HzToneGenerator {
           try {
             osc.stop()
             osc.disconnect()
-          } catch (e) {
-            // Already stopped
-          }
+          } catch (e) { }
         })
         this.oscillators = []
         if (this.gainNode) {
@@ -105,12 +100,9 @@ class HzToneGenerator {
   }
 }
 
-// Singleton instance
 export const hzGenerator = new HzToneGenerator()
 
-// Healing frequencies data
 export const HEALING_SOUNDS = {
-  // Binaural Beats
   binaural: {
     title: { en: 'Binaural Beats', es: 'Ritmos Binaurales' },
     subtitle: { en: 'Use headphones for best effect', es: 'Usa audífonos para mejor efecto' },
@@ -120,8 +112,6 @@ export const HEALING_SOUNDS = {
       { id: 'alpha', hz: 11, label: '11Hz', name: { en: 'Concentration', es: 'Concentración' }, icon: '🎯', baseHz: 200 },
     ]
   },
-
-  // Solfeggio Frequencies
   hertz: {
     title: { en: 'Healing Frequencies', es: 'Frecuencias Sanadoras' },
     subtitle: { en: 'Solfeggio & restoration tones', es: 'Tonos solfeggio y restauración' },
@@ -132,33 +122,29 @@ export const HEALING_SOUNDS = {
       { id: 'grounding', hz: 432, label: '432Hz', name: { en: 'Grounding', es: 'Conexión a Tierra' }, icon: '🌍' },
     ]
   },
-
-  // Chakra Frequencies - UPDATED TO LOCAL MP3 FILES
   chakra: {
     title: { en: 'Chakra Frequencies', es: 'Frecuencias de Chakras' },
     subtitle: { en: 'Balance your energy centers', es: 'Equilibra tus centros de energía' },
     sounds: [
-      { id: 'root', localPath: '/sounds/1st-Root-396Hz_.mp3', label: '396Hz', name: { en: '1st - Root', es: '1° - Raíz' }, icon: '🔴', color: '#ef4444' },
-      { id: 'sacral', localPath: '/sounds/2nd-Sacral-417Hz_.mp3', label: '417Hz', name: { en: '2nd - Sacral', es: '2° - Sacro' }, icon: '🟠', color: '#f97316' },
-      { id: 'solar', localPath: '/sounds/3rd-Solar-528Hz_.mp3', label: '528Hz', name: { en: '3rd - Solar Plexus', es: '3° - Plexo Solar' }, icon: '🟡', color: '#eab308' },
-      { id: 'heart', localPath: '/sounds/4th-Heart-639Hz_.mp3', label: '639Hz', name: { en: '4th - Heart', es: '4° - Corazón' }, icon: '💚', color: '#22c55e' },
-      { id: 'throat', localPath: '/sounds/5th-Throat-741Hz_.mp3', label: '741Hz', name: { en: '5th - Throat', es: '5° - Garganta' }, icon: '🔵', color: '#3b82f6' },
-      { id: 'third_eye', localPath: '/sounds/6th-ThirdEye-852Hz_.mp3', label: '852Hz', name: { en: '6th - Third Eye', es: '6° - Tercer Ojo' }, icon: '💜', color: '#8b5cf6' },
-      { id: 'crown', localPath: '/sounds/7th-Crown-963Hz_.mp3', label: '963Hz', name: { en: '7th - Crown', es: '7° - Corona' }, icon: '⚪', color: '#a855f7' },
+      { id: 'root', localPath: '/sounds/1st-Root-396Hz.mp3', label: '396Hz', name: { en: '1st - Root', es: '1° - Raíz' }, icon: '🔴', color: '#ef4444' },
+      { id: 'sacral', localPath: '/sounds/2nd-Sacral-417Hz.mp3', label: '417Hz', name: { en: '2nd - Sacral', es: '2° - Sacro' }, icon: '🟠', color: '#f97316' },
+      { id: 'solar', localPath: '/sounds/3rd-Solar-528Hz.mp3', label: '528Hz', name: { en: '3rd - Solar Plexus', es: '3° - Plexo Solar' }, icon: '🟡', color: '#eab308' },
+      { id: 'heart', localPath: '/sounds/4th-Heart-639Hz.mp3', label: '639Hz', name: { en: '4th - Heart', es: '4° - Corazón' }, icon: '💚', color: '#22c55e' },
+      { id: 'throat', localPath: '/sounds/5th-Throat-741Hz.mp3', label: '741Hz', name: { en: '5th - Throat', es: '5° - Garganta' }, icon: '🔵', color: '#3b82f6' },
+      { id: 'third_eye', localPath: '/sounds/6th-ThirdEye-852Hz.mp3', label: '852Hz', name: { en: '6th - Third Eye', es: '6° - Tercer Ojo' }, icon: '💜', color: '#8b5cf6' },
+      { id: 'crown', localPath: '/sounds/7th-Crown-963Hz.mp3', label: '963Hz', name: { en: '7th - Crown', es: '7° - Corona' }, icon: '⚪', color: '#a855f7' },
     ]
   },
-
-  // Nature/ASMR sounds - UPDATED TO LOCAL MP3 FILES
   nature: {
     title: { en: 'Nature & ASMR', es: 'Naturaleza y ASMR' },
     subtitle: { en: 'Relaxing ambient sounds', es: 'Sonidos ambientales relajantes' },
     sounds: [
-      { id: 'rain', localPath: '/sounds/GentleRain_.mp3', name: { en: 'Gentle Rain', es: 'Lluvia Suave' }, icon: '🌧️' },
-      { id: 'waves', localPath: '/sounds/OceanWaves_.mp3', name: { en: 'Ocean Waves', es: 'Olas del Mar' }, icon: '🌊' },
-      { id: 'fireplace', localPath: '/sounds/Fireplace_.mp3', name: { en: 'Fireplace', es: 'Chimenea' }, icon: '🔥' },
-      { id: 'crickets', localPath: '/sounds/NightCrickets_.mp3', name: { en: 'Grillos Nocturnos' }, icon: '🦗' },
-      { id: 'forest', localPath: '/sounds/ForestBirds_.mp3', name: { en: 'Forest Birds', es: 'Pájaros del Bosque' }, icon: '🌲' },
-      { id: 'wind', localPath: '/sounds/GentleWind_.mp3', name: { en: 'Gentle Wind', es: 'Viento Suave' }, icon: '💨' },
+      { id: 'rain', localPath: '/sounds/GentleRain.mp3', name: { en: 'Gentle Rain', es: 'Lluvia Suave' }, icon: '🌧️' },
+      { id: 'waves', localPath: '/sounds/OceanWaves.mp3', name: { en: 'Ocean Waves', es: 'Olas del Mar' }, icon: '🌊' },
+      { id: 'fireplace', localPath: '/sounds/Fireplace.mp3', name: { en: 'Fireplace', es: 'Chimenea' }, icon: '🔥' },
+      { id: 'crickets', localPath: '/sounds/NightCrickets.mp3', name: { en: 'Grillos Nocturnos', es: 'Grillos Nocturnos' }, icon: '🦗' },
+      { id: 'forest', localPath: '/sounds/ForestBirds.mp3', name: { en: 'Forest Birds', es: 'Pájaros del Bosque' }, icon: '🌲' },
+      { id: 'wind', localPath: '/sounds/GentleWind.mp3', name: { en: 'Gentle Wind', es: 'Viento Suave' }, icon: '💨' },
     ]
   }
 }

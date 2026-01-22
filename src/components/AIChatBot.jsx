@@ -19,7 +19,6 @@ export default function AIChatBot() {
   useEffect(() => {
     const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
     if (apiKey) {
-      // FIX: Ensure we use the latest library features
       genAI.current = new GoogleGenerativeAI(apiKey);
     }
   }, []);
@@ -28,20 +27,29 @@ export default function AIChatBot() {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  const playAIVoice = (base64Audio) => {
-    if (!voiceEnabled || !base64Audio) return;
+  const playAIVoice = (text) => {
+    if (!voiceEnabled || !text) return;
     
-    if (audioRef.current) {
-      audioRef.current.pause();
+    window.speechSynthesis.cancel();
+    
+    const utterance = new SpeechSynthesisUtterance(text);
+    const voices = window.speechSynthesis.getVoices();
+    
+    const preferredVoice = voices.find(voice => 
+      voice.name.includes('Samantha') || 
+      voice.name.includes('Google US English') ||
+      (voice.lang.includes('en') && voice.name.includes('Female'))
+    ) || voices.find(voice => voice.lang.includes('en-US'));
+    
+    if (preferredVoice) {
+      utterance.voice = preferredVoice;
     }
-
-    try {
-      const audioUrl = `data:audio/wav;base64,${base64Audio}`;
-      audioRef.current = new Audio(audioUrl);
-      audioRef.current.play().catch(e => console.error("Audio playback failed:", e));
-    } catch (err) {
-      console.error("Audio decoding failed:", err);
-    }
+    
+    utterance.rate = 0.95;
+    utterance.pitch = 1.05;
+    utterance.volume = 1;
+    
+    window.speechSynthesis.speak(utterance);
   };
 
   const sendMessage = async () => {
@@ -52,21 +60,11 @@ export default function AIChatBot() {
     setMessages(prev => [...prev, { role: 'user', content: userMessage }]);
     setIsLoading(true);
 
-    // FIX: Using gemini-1.5-flash which has the widest availability
-    // and supporting text-only fallback if audio config fails
     try {
+      // FIXED: Simplified to work with standard Gemini API
       const model = genAI.current.getGenerativeModel({ 
-        model: "gemini-1.5-flash",
-        systemInstruction: "You are Paz, a compassionate mental health guide. Speak with a warm, empathetic tone. Keep responses to 1-2 short sentences. Always be supportive."
+        model: "gemini-1.5-flash"
       });
-
-      // We wrap the audio attempt in a separate block to ensure text still works
-      const generationConfig = {
-        responseModalities: ["audio"],
-        speechConfig: {
-          voiceConfig: { prebuiltVoiceConfig: { voiceName: "Vindemiatrix" } }
-        }
-      };
 
       const chat = model.startChat({
         history: messages.slice(-6).map(msg => ({
@@ -75,23 +73,17 @@ export default function AIChatBot() {
         }))
       });
 
-      // Use the stable sendMessage but with audio config
-      const result = await chat.sendMessage(userMessage, generationConfig);
+      const result = await chat.sendMessage("You are Paz, a compassionate mental health guide. Speak with a warm, empathetic tone. Keep responses to 1-2 short sentences. Always be supportive.\n\nUser: " + userMessage);
       const responseText = result.response.text();
       
-      // Look for audio in the specific path Gemini uses
-      const audioPart = result.response.candidates?.[0]?.content?.parts?.find(p => p.inlineData);
-      
       setMessages(prev => [...prev, { role: 'assistant', content: responseText }]);
-      
-      if (audioPart?.inlineData?.data) {
-        playAIVoice(audioPart.inlineData.data);
-      }
+      playAIVoice(responseText);
       
     } catch (error) {
       console.error("Gemini Error:", error);
-      // Fallback message if the whole connection fails
-      setMessages(prev => [...prev, { role: 'assistant', content: "I'm here, but I'm having a little trouble with my connection. How can I support you right now?" }]);
+      const fallbackMsg = "I'm here, but I'm having a little trouble with my connection. How can I support you right now?";
+      setMessages(prev => [...prev, { role: 'assistant', content: fallbackMsg }]);
+      playAIVoice(fallbackMsg);
     }
     
     setIsLoading(false);

@@ -12,12 +12,10 @@ export default function AIChatBot() {
   const [isLoading, setIsLoading] = useState(false);
   const [voiceEnabled, setVoiceEnabled] = useState(true);
   
-  // Detect current language (matching your translation.js logic)
   const currentLang = localStorage.getItem('paz_language') || 'en';
 
   const messagesEndRef = useRef(null);
   const genAI = useRef(null);
-  const audioRef = useRef(null);
 
   useEffect(() => {
     const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
@@ -34,13 +32,10 @@ export default function AIChatBot() {
 
   const playAIVoice = (text) => {
     if (!voiceEnabled || !text) return;
-    
     window.speechSynthesis.cancel();
-    
     const utterance = new SpeechSynthesisUtterance(text);
     const voices = window.speechSynthesis.getVoices();
     
-    // Updated voice selection to pick Spanish or English based on app state
     const preferredVoice = voices.find(voice => {
       if (currentLang === 'es') {
         return voice.lang.includes('es') && (voice.name.includes('Monica') || voice.name.includes('Google'));
@@ -49,14 +44,9 @@ export default function AIChatBot() {
       }
     }) || voices.find(voice => voice.lang.includes(currentLang));
     
-    if (preferredVoice) {
-      utterance.voice = preferredVoice;
-    }
-    
+    if (preferredVoice) utterance.voice = preferredVoice;
     utterance.rate = 0.95;
     utterance.pitch = 1.05;
-    utterance.volume = 1;
-    
     window.speechSynthesis.speak(utterance);
   };
 
@@ -69,11 +59,11 @@ export default function AIChatBot() {
     setIsLoading(true);
 
     try {
+      // STABLE MODEL CALL (No "models/" prefix)
       const model = genAI.current.getGenerativeModel({ 
         model: "gemini-1.5-flash"
       });
 
-      // BILINGUAL PROMPT: Tells Gemini to use the specific language detected
       const result = await model.generateContent(
         `You are Paz, a compassionate spiritual guide. 
          The user's preferred language is ${currentLang === 'es' ? 'Spanish' : 'English'}.
@@ -82,14 +72,15 @@ export default function AIChatBot() {
          User says: ${userMessage}`
       );
      
-      const responseText = result.response.text();
+      // SAFETY: Await the response extraction
+      const response = await result.response;
+      const responseText = response.text();
       
       setMessages(prev => [...prev, { role: 'assistant', content: responseText }]);
       playAIVoice(responseText);
       
     } catch (error) {
       console.error("Gemini Error:", error);
-      // Fallback message also responds in the correct language
       const fallbackMsg = currentLang === 'es' 
         ? "Estoy aquí, pero tengo un pequeño problema con mi conexión. ¿Cómo puedo apoyarte en este momento?"
         : "I'm here, but I'm having a little trouble with my connection. How can I support you right now?";
@@ -129,10 +120,7 @@ export default function AIChatBot() {
               </div>
             </div>
             <div className={styles.headerRight}>
-               <button 
-                onClick={() => setVoiceEnabled(!voiceEnabled)} 
-                className={styles.iconButton}
-              >
+               <button onClick={() => setVoiceEnabled(!voiceEnabled)} className={styles.iconButton}>
                 {voiceEnabled ? <Volume2 size={20} /> : <VolumeX size={20} />}
               </button>
               <button onClick={() => setIsOpen(false)} className={styles.iconButton}><X size={20} /></button>

@@ -3,23 +3,23 @@
 
 const SOUNDS = {
   // Nature & Meditation Loops (Used in Breathe/Home)
-  relaxing: '/sounds/Forest birds_.mp3',
-  energizing: '/sounds/Gentle Wind_.mp3',
-  box: '/sounds/Ocean waves_.mp3',
-  sleep: '/sounds/Night Crickets_.mp3',
+  relaxing: '/sounds/ForestBirds_.mp3',
+  energizing: '/sounds/GentleWind_.mp3',
+  box: '/sounds/OceanWaves_.mp3',
+  sleep: '/sounds/NightCrickets_.mp3',
   fireplace: '/sounds/Fireplace_.mp3',
 
   // Chakra Frequencies (Specific Healing Sounds)
-  crown: '/sounds/7th Crown 963Hz_.mp3',
-  thirdeye: '/sounds/6th Third Eye 852 Hz_.mp3',
-  throat: '/sounds/5th Throat 741Hz_.mp3',
-  heart: '/sounds/4th Heart 639 Hz_ .mp3',
-  solar: '/sounds/3rd Solar plexus_528 Hz_.mp3',
-  sacral: '/sounds/2nd Sacral 417 Hz_.mp3',
+  crown: '/sounds/7th-Crown-963Hz_.mp3',
+  thirdeye: '/sounds/6th-ThirdEye-852Hz_.mp3',
+  throat: '/sounds/5th-Throat-741Hz_.mp3',
+  heart: '/sounds/4th-Heart-639Hz_.mp3',
+  solar: '/sounds/3rd-Solar-528Hz_.mp3',
+  sacral: '/sounds/2nd-Sacral-417Hz_.mp3',
 
   // UI Sounds (Assigning specific frequencies to app actions)
-  welcome: '/sounds/7th Crown 963Hz_.mp3',
-  success: '/sounds/6th Third Eye 852 Hz_.mp3'
+  welcome: '/sounds/7th-Crown-963Hz_.mp3',
+  success: '/sounds/6th-ThirdEye-852Hz_.mp3'
 }
 
 class SoundManager {

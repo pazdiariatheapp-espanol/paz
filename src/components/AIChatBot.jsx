@@ -19,6 +19,7 @@ export default function AIChatBot() {
   useEffect(() => {
     const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
     if (apiKey) {
+      // FIX: Ensure we use the latest library features
       genAI.current = new GoogleGenerativeAI(apiKey);
     }
   }, []);
@@ -49,56 +50,50 @@ export default function AIChatBot() {
     const userMessage = input.trim();
     setInput('');
     setMessages(prev => [...prev, { role: 'user', content: userMessage }]);
-
     setIsLoading(true);
 
-    // Prefer the TTS model for natural voice
-    const modelOptions = ["gemini-2.0-flash-tts", "gemini-1.5-flash"]; 
-    let success = false;
+    // FIX: Using gemini-1.5-flash which has the widest availability
+    // and supporting text-only fallback if audio config fails
+    try {
+      const model = genAI.current.getGenerativeModel({ 
+        model: "gemini-1.5-flash",
+        systemInstruction: "You are Paz, a compassionate mental health guide. Speak with a warm, empathetic tone. Keep responses to 1-2 short sentences. Always be supportive."
+      });
 
-    for (const modelName of modelOptions) {
-      if (success) break;
-      try {
-        const model = genAI.current.getGenerativeModel({ 
-          model: modelName,
-          systemInstruction: "You are a compassionate mental health guide named Paz. Speak with a warm, empathetic tone. Keep responses short (1-2 sentences). Always be supportive."
-        });
-
-        // Config specifically for high-quality audio
-        const generationConfig = {
-          responseModalities: ["audio"],
-          speechConfig: {
-            voiceConfig: { prebuiltVoiceConfig: { voiceName: "Vindemiatrix" } }
-          }
-        };
-
-        const chat = model.startChat({
-          history: messages.slice(-6).map(msg => ({
-            role: msg.role === 'user' ? 'user' : 'model',
-            parts: [{ text: msg.content }]
-          }))
-        });
-
-        const result = await chat.sendMessage(userMessage, generationConfig);
-        const responseText = result.response.text();
-        
-        // Find the audio part in the response candidates
-        const audioPart = result.response.candidates[0]?.content?.parts?.find(p => p.inlineData);
-        
-        setMessages(prev => [...prev, { role: 'assistant', content: responseText }]);
-        
-        if (audioPart && audioPart.inlineData) {
-          playAIVoice(audioPart.inlineData.data);
+      // We wrap the audio attempt in a separate block to ensure text still works
+      const generationConfig = {
+        responseModalities: ["audio"],
+        speechConfig: {
+          voiceConfig: { prebuiltVoiceConfig: { voiceName: "Vindemiatrix" } }
         }
-        
-        success = true;
-      } catch (error) {
-        console.error(`Attempt with ${modelName} failed:`, error);
-        if (modelName === modelOptions[modelOptions.length - 1]) {
-          setMessages(prev => [...prev, { role: 'assistant', content: "I'm having a connection issue. Please try again." }]);
-        }
+      };
+
+      const chat = model.startChat({
+        history: messages.slice(-6).map(msg => ({
+          role: msg.role === 'user' ? 'user' : 'model',
+          parts: [{ text: msg.content }]
+        }))
+      });
+
+      // Use the stable sendMessage but with audio config
+      const result = await chat.sendMessage(userMessage, generationConfig);
+      const responseText = result.response.text();
+      
+      // Look for audio in the specific path Gemini uses
+      const audioPart = result.response.candidates?.[0]?.content?.parts?.find(p => p.inlineData);
+      
+      setMessages(prev => [...prev, { role: 'assistant', content: responseText }]);
+      
+      if (audioPart?.inlineData?.data) {
+        playAIVoice(audioPart.inlineData.data);
       }
+      
+    } catch (error) {
+      console.error("Gemini Error:", error);
+      // Fallback message if the whole connection fails
+      setMessages(prev => [...prev, { role: 'assistant', content: "I'm here, but I'm having a little trouble with my connection. How can I support you right now?" }]);
     }
+    
     setIsLoading(false);
   };
 

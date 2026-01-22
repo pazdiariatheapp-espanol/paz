@@ -34,7 +34,7 @@ class SoundManager {
   preload() {
     Object.entries(SOUNDS).forEach(([key, url]) => {
       const audio = new Audio()
-      audio.src = url
+      audio.src = encodeURI (url) 
       audio.preload = 'auto'
       audio.volume = this.volume
       this.sounds[key] = audio

@@ -126,7 +126,7 @@ export const HEALING_SOUNDS = {
     title: { en: 'Chakra Frequencies', es: 'Frecuencias de Chakras' },
     subtitle: { en: 'Balance your energy centers', es: 'Equilibra tus centros de energía' },
     sounds: [
-      { id: 'root', localPath: '/sounds/1st-Root-396Hz.mp3', label: '396Hz', name: { en: '1st - Root', es: '1° - Raíz' }, icon: '🔴', color: '#ef4444' },
+      { id: 'root', localPath: '/sounds/1st-Root-393Hz.mp3', label: '396Hz', name: { en: '1st - Root', es: '1° - Raíz' }, icon: '🔴', color: '#ef4444' },
       { id: 'sacral', localPath: '/sounds/2nd-Sacral-417Hz.mp3', label: '417Hz', name: { en: '2nd - Sacral', es: '2° - Sacro' }, icon: '🟠', color: '#f97316' },
       { id: 'solar', localPath: '/sounds/3rd-Solar-528Hz.mp3', label: '528Hz', name: { en: '3rd - Solar Plexus', es: '3° - Plexo Solar' }, icon: '🟡', color: '#eab308' },
       { id: 'heart', localPath: '/sounds/4th-Heart-639Hz.mp3', label: '639Hz', name: { en: '4th - Heart', es: '4° - Corazón' }, icon: '💚', color: '#22c55e' },

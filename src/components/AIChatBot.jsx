@@ -10,12 +10,12 @@ export default function AIChatBot() {
   const [isLoading, setIsLoading] = useState(false);
   const [voiceEnabled, setVoiceEnabled] = useState(true);
   
-  // Detect language (assuming you might have a lang state or check window location)
+  // Detect language based on URL path
   const currentLang = window.location.pathname.includes('/es') ? 'es' : 'en';
   
   const messagesEndRef = useRef(null);
   const genAI = useRef(null);
-  const chatSession = useRef(null); // This stores the conversation memory
+  const chatSession = useRef(null); // Stores the conversational memory
 
   useEffect(() => {
     const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
@@ -35,8 +35,8 @@ export default function AIChatBot() {
     const utterance = new SpeechSynthesisUtterance(text);
     const voices = window.speechSynthesis.getVoices();
     
-    // Select voice based on language
     const langCode = currentLang === 'es' ? 'es-ES' : 'en-US';
+    // Find a voice that matches the language
     const preferredVoice = voices.find(v => v.lang.startsWith(currentLang)) || voices[0];
     
     utterance.voice = preferredVoice;
@@ -54,11 +54,12 @@ export default function AIChatBot() {
     setIsLoading(true);
 
     try {
+      // Use the stable model ID to avoid v1beta 404 errors
       const model = genAI.current.getGenerativeModel({ 
         model: "gemini-1.5-flash" 
       });
 
-      // INITIALIZE CHAT SESSION (The "Memory")
+      // INITIALIZE CHAT SESSION (Memory) if it doesn't exist
       if (!chatSession.current) {
         const systemPrompt = currentLang === 'es' 
           ? "Eres Paz, una guía espiritual compasiva. Responde SIEMPRE en Español. Sé breve (1-2 frases) y empática."
@@ -66,27 +67,37 @@ export default function AIChatBot() {
 
         chatSession.current = model.startChat({
           history: [
-            { role: "user", parts: [{ text: systemPrompt }] },
-            { role: "model", parts: [{ text: currentLang === 'es' ? "Entendido, soy Paz. ¿Cómo te sientes?" : "Understood, I am Paz. How are you feeling?" }] },
+            { 
+              role: "user", 
+              parts: [{ text: systemPrompt }] 
+            },
+            { 
+              role: "model", 
+              parts: [{ text: currentLang === 'es' ? "Entendido, soy Paz. ¿Cómo te sientes?" : "Understood, I am Paz. How are you feeling?" }] 
+            },
           ],
           generationConfig: {
             maxOutputTokens: 150,
-            temperature: 0.8, // Higher temperature for more natural conversation
+            temperature: 0.8, // More natural, less repetitive
           },
         });
       }
 
-      // SEND MESSAGE THROUGH THE SESSION
+      // Send message through the session to maintain context
       const result = await chatSession.current.sendMessage(userMessage);
-      const responseText = result.response.text();
+      const response = await result.response;
+      const responseText = response.text();
       
       setMessages(prev => [...prev, { role: 'assistant', content: responseText }]);
       playAIVoice(responseText);
       
     } catch (error) {
       console.error("Gemini Error:", error);
-      chatSession.current = null; // Reset memory on error to unstick the bot
-      const fallbackMsg = currentLang === 'es' ? "Lo siento, ¿podemos intentar de nuevo?" : "I'm sorry, can we try again?";
+      // Reset chat on error to clear broken history
+      chatSession.current = null; 
+      const fallbackMsg = currentLang === 'es' 
+        ? "Lo siento, ¿podemos intentar de nuevo?" 
+        : "I'm sorry, can we try again?";
       setMessages(prev => [...prev, { role: 'assistant', content: fallbackMsg }]);
     }
     

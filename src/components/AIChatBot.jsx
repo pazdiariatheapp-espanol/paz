@@ -3,8 +3,6 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 import { Brain, Send, Volume2, VolumeX, X } from 'lucide-react';
 import styles from './AIChatBot.module.css';
 
-const CRISIS_KEYWORDS = ['suicide', 'kill myself', 'end my life', 'want to die', 'better off dead', 'hurt myself', 'self harm'];
-
 export default function AIChatBot() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([]);
@@ -12,15 +10,18 @@ export default function AIChatBot() {
   const [isLoading, setIsLoading] = useState(false);
   const [voiceEnabled, setVoiceEnabled] = useState(true);
   
+  // Detect language (assuming you might have a lang state or check window location)
+  const currentLang = window.location.pathname.includes('/es') ? 'es' : 'en';
+  
   const messagesEndRef = useRef(null);
   const genAI = useRef(null);
-  const chatRef = useRef(null);  // Store the chat instance
+  const chatSession = useRef(null); // This stores the conversation memory
 
   useEffect(() => {
     const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
     if (apiKey) {
       genAI.current = new GoogleGenerativeAI(apiKey);
-      console.log('Paz AI: Key loaded successfully');
+      console.log('Paz AI: Connection Established');
     }
   }, []);
 
@@ -30,26 +31,17 @@ export default function AIChatBot() {
 
   const playAIVoice = (text) => {
     if (!voiceEnabled || !text) return;
-    
     window.speechSynthesis.cancel();
-    
     const utterance = new SpeechSynthesisUtterance(text);
     const voices = window.speechSynthesis.getVoices();
     
-    const preferredVoice = voices.find(voice => 
-      voice.name.includes('Samantha') || 
-      voice.name.includes('Google US English') ||
-      (voice.lang.includes('en') && voice.name.includes('Female'))
-    ) || voices.find(voice => voice.lang.includes('en-US'));
+    // Select voice based on language
+    const langCode = currentLang === 'es' ? 'es-ES' : 'en-US';
+    const preferredVoice = voices.find(v => v.lang.startsWith(currentLang)) || voices[0];
     
-    if (preferredVoice) {
-      utterance.voice = preferredVoice;
-    }
-    
+    utterance.voice = preferredVoice;
+    utterance.lang = langCode;
     utterance.rate = 0.95;
-    utterance.pitch = 1.05;
-    utterance.volume = 1;
-    
     window.speechSynthesis.speak(utterance);
   };
 
@@ -58,43 +50,44 @@ export default function AIChatBot() {
 
     const userMessage = input.trim();
     setInput('');
-    const newMessages = [...messages, { role: 'user', content: userMessage }];
-    setMessages(newMessages);
+    setMessages(prev => [...prev, { role: 'user', content: userMessage }]);
     setIsLoading(true);
 
     try {
-      // Initialize chat only once with system instruction
-      if (!chatRef.current) {
-        const model = genAI.current.getGenerativeModel({ 
-          model: "gemini-1.5-flash",
-          systemInstruction: "You are Paz, a compassionate mental health companion. Speak warmly and empathetically. Keep responses brief (1-2 sentences). Be supportive and encouraging. Remember the conversation context."
-        });
-        
-        chatRef.current = model.startChat({
-          history: [],
+      const model = genAI.current.getGenerativeModel({ 
+        model: "gemini-1.5-flash" 
+      });
+
+      // INITIALIZE CHAT SESSION (The "Memory")
+      if (!chatSession.current) {
+        const systemPrompt = currentLang === 'es' 
+          ? "Eres Paz, una guía espiritual compasiva. Responde SIEMPRE en Español. Sé breve (1-2 frases) y empática."
+          : "You are Paz, a compassionate spiritual guide. Always respond in English. Keep it brief (1-2 sentences) and empathetic.";
+
+        chatSession.current = model.startChat({
+          history: [
+            { role: "user", parts: [{ text: systemPrompt }] },
+            { role: "model", parts: [{ text: currentLang === 'es' ? "Entendido, soy Paz. ¿Cómo te sientes?" : "Understood, I am Paz. How are you feeling?" }] },
+          ],
           generationConfig: {
             maxOutputTokens: 150,
-            temperature: 0.8,
-          }
+            temperature: 0.8, // Higher temperature for more natural conversation
+          },
         });
       }
 
-      // Send message with full context
-      const result = await chatRef.current.sendMessage(userMessage);
+      // SEND MESSAGE THROUGH THE SESSION
+      const result = await chatSession.current.sendMessage(userMessage);
       const responseText = result.response.text();
       
-      setMessages([...newMessages, { role: 'assistant', content: responseText }]);
+      setMessages(prev => [...prev, { role: 'assistant', content: responseText }]);
       playAIVoice(responseText);
       
     } catch (error) {
       console.error("Gemini Error:", error);
-      
-      // Reset chat on error and try again
-      chatRef.current = null;
-      
-      const fallbackMsg = "I'm here for you. Let's try that again - what's on your mind?";
-      setMessages([...newMessages, { role: 'assistant', content: fallbackMsg }]);
-      playAIVoice(fallbackMsg);
+      chatSession.current = null; // Reset memory on error to unstick the bot
+      const fallbackMsg = currentLang === 'es' ? "Lo siento, ¿podemos intentar de nuevo?" : "I'm sorry, can we try again?";
+      setMessages(prev => [...prev, { role: 'assistant', content: fallbackMsg }]);
     }
     
     setIsLoading(false);
@@ -122,14 +115,11 @@ export default function AIChatBot() {
               <Brain size={24} className={styles.brainIcon} />
               <div>
                 <h3 className={styles.title}>Paz AI</h3>
-                <p className={styles.subtitle}>Compassionate Guide</p>
+                <p className={styles.subtitle}>{currentLang === 'es' ? 'Guía Compasiva' : 'Compassionate Guide'}</p>
               </div>
             </div>
             <div className={styles.headerRight}>
-               <button 
-                onClick={() => setVoiceEnabled(!voiceEnabled)} 
-                className={styles.iconButton}
-              >
+               <button onClick={() => setVoiceEnabled(!voiceEnabled)} className={styles.iconButton}>
                 {voiceEnabled ? <Volume2 size={20} /> : <VolumeX size={20} />}
               </button>
               <button onClick={() => setIsOpen(false)} className={styles.iconButton}><X size={20} /></button>
@@ -140,17 +130,15 @@ export default function AIChatBot() {
             {messages.length === 0 && (
               <div className={styles.welcome}>
                 <Brain size={48} className={styles.welcomeBrain} />
-                <h4>Welcome to Paz AI</h4>
-                <p>I'm here to support your mental wellness. How are you feeling?</p>
+                <h4>{currentLang === 'es' ? 'Bienvenido a Paz AI' : 'Welcome to Paz AI'}</h4>
+                <p>{currentLang === 'es' ? 'Estoy aquí para apoyarte. ¿Cómo te sientes?' : "I'm here to support your mental wellness. How are you feeling?"}</p>
               </div>
             )}
             {messages.map((msg, idx) => (
               <div key={idx} className={`${styles.message} ${styles[msg.role]}`}>{msg.content}</div>
             ))}
             {isLoading && <div className={`${styles.message} ${styles.assistant}`}>
-              <div className={styles.typing}>
-                <span></span><span></span><span></span>
-              </div>
+              <div className={styles.typing}><span></span><span></span><span></span></div>
             </div>}
             <div ref={messagesEndRef} />
           </div>
@@ -160,7 +148,7 @@ export default function AIChatBot() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyPress}
-              placeholder="Talk to Paz..."
+              placeholder={currentLang === 'es' ? 'Habla con Paz...' : 'Talk to Paz...'}
               className={styles.input}
               rows={1}
             />

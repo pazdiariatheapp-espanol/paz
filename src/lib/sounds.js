@@ -21,7 +21,7 @@ const SOUNDS = {
 
   // UI Sounds
   welcome: '/sounds/welcome.mp3',
-  success: '/sounds/sucess.mp3',
+  success: '/sounds/success.mp3',
 }
 
 class SoundManager {

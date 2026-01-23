@@ -11,17 +11,17 @@ const SOUNDS = {
   fireplace: '/sounds/fireplace.mp3',
 
   // Chakra Frequencies (matching your actual files)
-  crown: '/sounds/7th-Crown-963Hz.mp3',
-  thirdeye: '/sounds/6th-ThirdEye-852Hz.mp3',
-  throat: '/sounds/5th-Throat-741Hz.mp3',
-  heart: '/sounds/4th-Heart-639Hz.mp3',
-  solar: '/sounds/3rd-Solar-528Hz.mp3',
-  sacral: '/sounds/2nd-Sacral-417Hz.mp3',
-  root: '/sounds/1st-Crown-396Hz.mp3',  // FIXED: This is your actual filename
+  crown: '/sounds/crown.mp3',
+  thirdeye: '/sounds/thirdeye.mp3',
+  throat: '/sounds/thoat.mp3',
+  heart: '/sounds/heart.mp3',
+  solar: '/sounds/solar.mp3',
+  sacral: '/sounds/sacral.mp3',
+  root: '/sounds/root.mp3',  // FIXED: This is your actual filename
 
   // UI Sounds
-  welcome: '/sounds/7th-Crown-963Hz.mp3',
-  success: '/sounds/6th-ThirdEye-852Hz.mp3',
+  welcome: '/sounds/welcome.mp3',
+  success: '/sounds/sucess.mp3',
 }
 
 class SoundManager {

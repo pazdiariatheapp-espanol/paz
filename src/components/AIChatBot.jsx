@@ -79,7 +79,9 @@ export default function AIChatBot() {
 
         chatSession.current = model.startChat({
           history: [],
-          systemInstruction: systemPrompt,
+          systemInstruction: {
+            parts: [{ text: systemPrompt }]
+          },
           generationConfig: {
             maxOutputTokens: 150,
             temperature: 0.8,

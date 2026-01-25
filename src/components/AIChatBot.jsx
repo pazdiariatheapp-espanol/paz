@@ -34,7 +34,7 @@ export default function AIChatBot() {
     
     // Play sound effect if text contains specific keywords
     if (text.includes('throat')) {
-      const audio = new Audio('/sounds/5th-Throat-741Hz.mp3');
+      const audio = new Audio('/sounds/throat.mp3');
       audio.play().catch(err => console.log('Sound play error:', err));
     } else if (text.includes('success')) {
       const audio = new Audio('/sounds/success.mp3');
@@ -68,7 +68,7 @@ export default function AIChatBot() {
     try {
       // Use the stable model ID to avoid v1beta 404 errors
       const model = genAI.current.getGenerativeModel({ 
-        model: "gemini-1.5-flash" 
+        model: "gemini-pro" 
       });
 
       // INITIALIZE CHAT SESSION (Memory) if it doesn't exist

@@ -36,7 +36,7 @@ export const saveMoodEntry = async (userId, mood, note = '') => {
   // Dual sync: also save to pazhealth_messages
   if (legacyData && legacyData.length > 0) {
     const entry = legacyData[0]
-    await supabase
+    supabase
       .from('pazhealth_messages')
       .insert([{
         user_id: userId,
@@ -44,6 +44,7 @@ export const saveMoodEntry = async (userId, mood, note = '') => {
         content: note,
         metadata: { mood, original_id: entry.id }
       }])
+      .then(() => {})
       .catch(() => {})
   }
 
@@ -69,7 +70,7 @@ export const saveJournalEntry = async (userId, content, gratitude = []) => {
   // Dual sync: also save to pazhealth_messages
   if (legacyData && legacyData.length > 0) {
     const entry = legacyData[0]
-    await supabase
+    supabase
       .from('pazhealth_messages')
       .insert([{
         user_id: userId,
@@ -77,6 +78,7 @@ export const saveJournalEntry = async (userId, content, gratitude = []) => {
         content: content,
         metadata: { gratitude, original_id: entry.id }
       }])
+      .then(() => {})
       .catch(() => {})
   }
 

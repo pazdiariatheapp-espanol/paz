@@ -13,7 +13,7 @@ const SOUNDS = {
   // Chakra Frequencies (matching your actual files)
   crown: '/sounds/crown.mp3',
   thirdeye: '/sounds/thirdeye.mp3',
-  throat: '/sounds/thoat.mp3',
+  throat: '/sounds/throat.mp3',
   heart: '/sounds/heart.mp3',
   solar: '/sounds/solar.mp3',
   sacral: '/sounds/sacral.mp3',

@@ -127,7 +127,7 @@ export const HEALING_SOUNDS = {
     subtitle: { en: 'Balance your energy centers', es: 'Equilibra tus centros de energía' },
     sounds: [
       { id: 'root', localPath: '/sounds/root.mp3', label: '396Hz', name: { en: '1st - root', es: '1° - raíz' }, icon: '🔴', color: '#ef4444' },
-      { id: 'sacral', localPath: '/sounds/sacral.mp3', label: '417Hz', name: { en: '2nd - racral', es: '2° - sacro' }, icon: '🟠', color: '#f97316' },
+      { id: 'sacral', localPath: '/sounds/sacral.mp3', label: '417Hz', name: { en: '2nd - sracral', es: '2° - sacro' }, icon: '🟠', color: '#f97316' },
       { id: 'solar', localPath: '/sounds/solar.mp3', label: '528Hz', name: { en: '3rd - solar', es: '3° - solar' }, icon: '🟡', color: '#eab308' },
       { id: 'heart', localPath: '/sounds/heart.mp3', label: '639Hz', name: { en: '4th - heart', es: '4° - corazón' }, icon: '💚', color: '#22c55e' },
       { id: 'throat', localPath: '/sounds/throat.mp3', label: '741Hz', name: { en: '5th - throat', es: '5° - garganta' }, icon: '🔵', color: '#3b82f6' },

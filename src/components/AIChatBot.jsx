@@ -42,6 +42,14 @@ export default function AIChatBot() {
     utterance.voice = preferredVoice;
     utterance.lang = langCode;
     utterance.rate = 0.95;
+
+    // Play sound effects based on text content
+    if (text.includes('throat')) {
+      utterance.text += '5th-Throat-741Hz.mp3';
+    } else if (text.includes('success')) {
+      utterance.text += 'success.mp3';
+    }
+
     window.speechSynthesis.speak(utterance);
   };
 
@@ -83,8 +91,13 @@ export default function AIChatBot() {
         });
       }
 
-      // Send message through the session to maintain context
-      const result = await chatSession.current.sendMessage(userMessage);
+      // Updated code
+      const result = await chatSession.current.sendMessage(userMessage, {
+        generationConfig: {
+          maxOutputTokens: 150,
+          temperature: 0.8,
+        },
+      });    
       const response = await result.response;
       const responseText = response.text();
       

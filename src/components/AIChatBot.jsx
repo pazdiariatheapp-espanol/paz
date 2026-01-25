@@ -15,13 +15,16 @@ export default function AIChatBot() {
   
   const messagesEndRef = useRef(null);
   const genAI = useRef(null);
-  const chatSession = useRef(null); // Stores the conversational memory
+  const chatSession = useRef(null);
 
   useEffect(() => {
+    // Vite uses import.meta.env for environment variables
     const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
     if (apiKey) {
       genAI.current = new GoogleGenerativeAI(apiKey);
       console.log('Paz AI: Connection Established');
+    } else {
+      console.error('Paz AI: Missing VITE_GEMINI_API_KEY');
     }
   }, []);
 
@@ -32,22 +35,22 @@ export default function AIChatBot() {
   const playAIVoice = (text) => {
     if (!voiceEnabled || !text) return;
     
-    // Play sound effect if text contains specific keywords
-    if (text.includes('throat')) {
+    const lowerText = text.toLowerCase();
+    
+    // Play sound effect based on keywords in the AI response
+    if (lowerText.includes('throat')) {
       const audio = new Audio('/sounds/throat.mp3');
-      audio.play().catch(err => console.log('Sound play error:', err));
-    } else if (text.includes('success')) {
+      audio.play().catch(err => console.log('Audio error:', err));
+    } else if (lowerText.includes('success')) {
       const audio = new Audio('/sounds/success.mp3');
-      audio.play().catch(err => console.log('Sound play error:', err));
+      audio.play().catch(err => console.log('Audio error:', err));
     }
     
-    // Use Web Speech API for text-to-speech
+    // Web Speech API for TTS
     window.speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(text);
     const voices = window.speechSynthesis.getVoices();
-    
     const langCode = currentLang === 'es' ? 'es-ES' : 'en-US';
-    // Find a voice that matches the language
     const preferredVoice = voices.find(v => v.lang.startsWith(currentLang)) || voices[0];
     
     utterance.voice = preferredVoice;
@@ -66,12 +69,8 @@ export default function AIChatBot() {
     setIsLoading(true);
 
     try {
-      // Use the stable model ID to avoid v1beta 404 errors
-      const model = genAI.current.getGenerativeModel({ 
-        model: "gemini-pro" 
-      });
+      const model = genAI.current.getGenerativeModel({ model: "gemini-1.5-flash" });
 
-      // INITIALIZE CHAT SESSION (Memory) if it doesn't exist
       if (!chatSession.current) {
         const systemPrompt = currentLang === 'es' 
           ? "Eres Paz, una guía espiritual compasiva. Responde SIEMPRE en Español. Sé breve (1-2 frases) y empática."
@@ -79,29 +78,13 @@ export default function AIChatBot() {
 
         chatSession.current = model.startChat({
           history: [
-            {
-              role: "user",
-              parts: [{ text: systemPrompt }]
-            },
-            {
-              role: "model",
-              parts: [{ text: currentLang === 'es' ? "Entendido. Soy Paz, tu guía espiritual compasiva. ¿Cómo te puedo ayudar hoy?" : "Understood. I am Paz, your compassionate spiritual guide. How can I help you today?" }]
-            }
+            { role: "user", parts: [{ text: systemPrompt }] },
+            { role: "model", parts: [{ text: currentLang === 'es' ? "Entendido. ¿Cómo te puedo ayudar hoy?" : "Understood. How can I help you today?" }] }
           ],
-          generationConfig: {
-            maxOutputTokens: 150,
-            temperature: 0.8,
-          },
         });
       }
 
-      // Updated code
-      const result = await chatSession.current.sendMessage(userMessage, {
-        generationConfig: {
-          maxOutputTokens: 150,
-          temperature: 0.8,
-        },
-      });    
+      const result = await chatSession.current.sendMessage(userMessage);    
       const response = await result.response;
       const responseText = response.text();
       
@@ -110,11 +93,8 @@ export default function AIChatBot() {
       
     } catch (error) {
       console.error("Gemini Error:", error);
-      // Reset chat on error to clear broken history
       chatSession.current = null; 
-      const fallbackMsg = currentLang === 'es' 
-        ? "Lo siento, ¿podemos intentar de nuevo?" 
-        : "I'm sorry, can we try again?";
+      const fallbackMsg = currentLang === 'es' ? "Lo siento, ¿podemos intentar de nuevo?" : "I'm sorry, can we try again?";
       setMessages(prev => [...prev, { role: 'assistant', content: fallbackMsg }]);
     }
     
@@ -159,15 +139,13 @@ export default function AIChatBot() {
               <div className={styles.welcome}>
                 <Brain size={48} className={styles.welcomeBrain} />
                 <h4>{currentLang === 'es' ? 'Bienvenido a Paz AI' : 'Welcome to Paz AI'}</h4>
-                <p>{currentLang === 'es' ? 'Estoy aquí para apoyarte. ¿Cómo te sientes?' : "I'm here to support your mental wellness. How are you feeling?"}</p>
+                <p>{currentLang === 'es' ? 'Estoy aquí para apoyarte.' : "I'm here to support you."}</p>
               </div>
             )}
             {messages.map((msg, idx) => (
               <div key={idx} className={`${styles.message} ${styles[msg.role]}`}>{msg.content}</div>
             ))}
-            {isLoading && <div className={`${styles.message} ${styles.assistant}`}>
-              <div className={styles.typing}><span></span><span></span><span></span></div>
-            </div>}
+            {isLoading && <div className={`${styles.message} ${styles.assistant}`}><div className={styles.typing}><span></span><span></span><span></span></div></div>}
             <div ref={messagesEndRef} />
           </div>
 

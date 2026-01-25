@@ -78,10 +78,16 @@ export default function AIChatBot() {
           : "You are Paz, a compassionate spiritual guide. Always respond in English. Keep it brief (1-2 sentences) and empathetic.";
 
         chatSession.current = model.startChat({
-          history: [],
-          systemInstruction: {
-            parts: [{ text: systemPrompt }]
-          },
+          history: [
+            {
+              role: "user",
+              parts: [{ text: systemPrompt }]
+            },
+            {
+              role: "model",
+              parts: [{ text: currentLang === 'es' ? "Entendido. Soy Paz, tu guía espiritual compasiva. ¿Cómo te puedo ayudar hoy?" : "Understood. I am Paz, your compassionate spiritual guide. How can I help you today?" }]
+            }
+          ],
           generationConfig: {
             maxOutputTokens: 150,
             temperature: 0.8,

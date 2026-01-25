@@ -86,7 +86,7 @@ export default function AIChatBot() {
   const initializeChatSession = async () => {
     if (chatSession.current) return
 
-    const model = genAI.current.getGenerativeModel({ model: 'gemini-pro' })
+    const model = genAI.current.getGenerativeModel({ model: 'gemini-1.5-pro' })
     const systemPrompt = language === 'es'
       ? 'Eres Paz, una guía espiritual compasiva y empática. Responde SIEMPRE en Español. Sé breve (1-2 frases), empático y comprensivo. Enfócate en el bienestar mental y emocional.'
       : 'You are Paz, a compassionate and empathetic spiritual guide. Always respond in English. Keep it brief (1-2 sentences), empathetic and understanding. Focus on mental and emotional wellness.'

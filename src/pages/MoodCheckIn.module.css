@@ -11,20 +11,25 @@
 }
 
 .title {
-  font-size: 1.75rem;
+  font-size: 2rem;
+  background: linear-gradient(135deg, var(--accent-calm), var(--accent-peace));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .moodGrid {
   display: flex;
   justify-content: center;
-  gap: var(--space-md);
+  gap: var(--space-lg);
   flex-wrap: wrap;
   margin-bottom: var(--space-xl);
 }
 
 .moodBtn {
-  width: 80px;
-  height: 100px;
+  position: relative;
+  width: 90px;
+  height: 110px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -37,6 +42,7 @@
   border-radius: var(--radius-md);
   cursor: pointer;
   transition: all 0.3s ease;
+  overflow: hidden;
 }
 
 .moodBtn:active {
@@ -44,33 +50,45 @@
 }
 
 .moodBtnActive {
+  border-color: var(--mood-color);
   background: rgba(255, 255, 255, 0.1);
-  box-shadow: 0 0 20px var(--mood-color);
+  box-shadow: 0 0 20px var(--mood-color),
+              inset 0 0 20px rgba(255, 255, 255, 0.05);
+}
+
+.moodGlow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle, var(--mood-color) 0%, transparent 70%);
+  opacity: 0.1;
+  pointer-events: none;
 }
 
 .moodEmoji {
-  font-size: 2rem;
+  font-size: 2.5rem;
   transition: transform 0.3s ease;
 }
 
 .moodBtnActive .moodEmoji {
-  transform: scale(1.2);
+  transform: scale(1.3);
 }
 
 .moodLabel {
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   color: var(--text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  font-weight: 600;
 }
 
 .noteSection {
   transition: opacity 0.3s ease;
+  margin-bottom: var(--space-lg);
 }
 
 .noteInput {
   width: 100%;
-  min-height: 120px;
+  min-height: 140px;
   padding: var(--space-lg);
   background: var(--bg-glass);
   backdrop-filter: blur(20px);
@@ -81,15 +99,22 @@
   font-family: var(--font-body);
   font-size: 1rem;
   resize: none;
+  transition: all 0.3s ease;
 }
 
 .noteInput:focus {
   outline: none;
   border-color: var(--accent-calm);
+  box-shadow: 0 0 0 3px rgba(126, 184, 218, 0.2);
 }
 
 .noteInput::placeholder {
   color: var(--text-muted);
+}
+
+.noteInput:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .success {
@@ -98,21 +123,42 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  text-align: center;
+  position: relative;
+  gap: var(--space-xl);
 }
 
 .successEmoji {
-  font-size: 5rem;
-  margin-bottom: var(--space-lg);
-  animation: bounce 0.6s ease;
+  font-size: 4rem;
+  filter: drop-shadow(0 0 20px rgba(126, 184, 218, 0.4));
 }
 
 .successText {
   font-size: 1.5rem;
+  text-align: center;
   color: var(--accent-calm);
 }
 
-@keyframes bounce {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-20px); }
+.particle {
+  position: absolute;
+  font-size: 1.5rem;
+  pointer-events: none;
+}
+
+@media (max-width: 480px) {
+  .moodGrid {
+    gap: var(--space-md);
+  }
+
+  .moodBtn {
+    width: 70px;
+    height: 90px;
+  }
+
+  .moodEmoji {
+    font-size: 2rem;
+  }
+
+  .title {
+    font-size: 1.5rem;
+  }
 }

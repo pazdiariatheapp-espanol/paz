@@ -26,13 +26,28 @@ export const getCurrentUser = async () => {
   return user
 }
 
-// Database helpers
+// Database helpers - Legacy tables
 export const saveMoodEntry = async (userId, mood, note = '') => {
-  const { data, error } = await supabase
+  const { data: legacyData, error: legacyError } = await supabase
     .from('mood_entries')
     .insert([{ user_id: userId, mood, note }])
     .select()
-  return { data, error }
+
+  // Dual sync: also save to pazhealth_messages
+  if (legacyData && legacyData.length > 0) {
+    const entry = legacyData[0]
+    await supabase
+      .from('pazhealth_messages')
+      .insert([{
+        user_id: userId,
+        type: 'mood_entry',
+        content: note,
+        metadata: { mood, original_id: entry.id }
+      }])
+      .catch(() => {})
+  }
+
+  return { data: legacyData, error: legacyError }
 }
 
 export const getMoodEntries = async (userId, limit = 30) => {
@@ -46,11 +61,26 @@ export const getMoodEntries = async (userId, limit = 30) => {
 }
 
 export const saveJournalEntry = async (userId, content, gratitude = []) => {
-  const { data, error } = await supabase
+  const { data: legacyData, error: legacyError } = await supabase
     .from('journal_entries')
     .insert([{ user_id: userId, content, gratitude }])
     .select()
-  return { data, error }
+
+  // Dual sync: also save to pazhealth_messages
+  if (legacyData && legacyData.length > 0) {
+    const entry = legacyData[0]
+    await supabase
+      .from('pazhealth_messages')
+      .insert([{
+        user_id: userId,
+        type: 'journal_entry',
+        content: content,
+        metadata: { gratitude, original_id: entry.id }
+      }])
+      .catch(() => {})
+  }
+
+  return { data: legacyData, error: legacyError }
 }
 
 export const getJournalEntries = async (userId, limit = 30) => {
@@ -78,5 +108,58 @@ export const updateUserProfile = async (userId, updates) => {
     .update(updates)
     .eq('id', userId)
     .select()
+
+  // Dual sync: also update pazhealth_user_profiles
+  if (!error) {
+    await supabase
+      .from('pazhealth_user_profiles')
+      .upsert([{
+        user_id: userId,
+        ...updates,
+        updated_at: new Date()
+      }], { onConflict: 'user_id' })
+      .catch(() => {})
+  }
+
+  return { data, error }
+}
+
+// AI Chat messages - PazHealth
+export const saveAIChatMessage = async (userId, conversationId, role, content) => {
+  const { data, error } = await supabase
+    .from('pazhealth_messages')
+    .insert([{
+      user_id: userId,
+      conversation_id: conversationId,
+      type: 'ai_chat',
+      role,
+      content
+    }])
+    .select()
+
+  return { data, error }
+}
+
+export const getConversationHistory = async (userId, conversationId) => {
+  const { data, error } = await supabase
+    .from('pazhealth_messages')
+    .select('*')
+    .eq('user_id', userId)
+    .eq('conversation_id', conversationId)
+    .eq('type', 'ai_chat')
+    .order('created_at', { ascending: true })
+
+  return { data, error }
+}
+
+export const createConversation = async (userId) => {
+  const { data, error } = await supabase
+    .from('pazhealth_conversations')
+    .insert([{
+      user_id: userId,
+      title: `Chat ${new Date().toLocaleDateString()}`
+    }])
+    .select()
+
   return { data, error }
 }

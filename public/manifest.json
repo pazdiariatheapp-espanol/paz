@@ -1,12 +1,13 @@
 {
-  "name": "Paz - Your Daily Peace",
+  "name": "PazHealth - Your Daily Peace",
   "short_name": "Paz",
-  "description": "A simple app to help you manage stress, track your mood, and find moments of calm",
+  "description": "Track your mood, practice breathing exercises, journal your thoughts, and find moments of calm. Your wellness companion.",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
-  "background_color": "#0f172a",
+  "orientation": "portrait-primary",
+  "background_color": "#0a0a0f",
   "theme_color": "#7eb8da",
-  "orientation": "portrait",
   "icons": [
     {
       "src": "/icon-192.png",
@@ -19,6 +20,47 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
+    }
+  ],
+  "categories": ["health", "wellness"],
+  "screenshots": [
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "form_factor": "wide"
+    },
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "form_factor": "narrow"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Check Mood",
+      "short_name": "Mood",
+      "description": "Quickly check in on your mood",
+      "url": "/mood",
+      "icons": [
+        {
+          "src": "/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Breathing Exercise",
+      "short_name": "Breathe",
+      "description": "Start a breathing exercise",
+      "url": "/breathe",
+      "icons": [
+        {
+          "src": "/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
     }
   ]
 }

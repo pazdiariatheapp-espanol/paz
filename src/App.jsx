@@ -43,7 +43,7 @@ function App() {
       setUser(currentUser)
       setLoading(false)
     }
-    
+
     checkUser()
 
     // Listen for auth changes
@@ -58,11 +58,11 @@ function App() {
 
   if (loading) {
     return (
-      <div className="bg-mesh" style={{ 
-        height: '100vh', 
-        display: 'flex', 
-        alignItems: 'center', 
-        justifyContent: 'center' 
+      <div className="bg-mesh" style={{
+        height: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
       }}>
         <div className="animate-pulse" style={{ color: 'var(--text-secondary)' }}>
           Loading...
@@ -79,7 +79,7 @@ function App() {
         <Route path="/welcome" element={!user ? <Welcome /> : <Navigate to="/" />} />
         <Route path="/auth" element={!user ? <Auth /> : <Navigate to="/" />} />
         <Route path="/pricing" element={<Pricing />} />
-        
+
         {/* Protected routes */}
         <Route path="/" element={user ? <Layout /> : <Navigate to="/welcome" />}>
           <Route index element={<Home />} />
@@ -91,15 +91,15 @@ function App() {
           <Route path="subscription" element={<Subscription />} />
           <Route path="healing" element={<HealingSounds />} />
         </Route>
-        
+
         {/* Fallback */}
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
-      
+
       {/* Ad banner for non-premium users */}
       {user && showAds() && <AdBanner />}
-      
-      {/* Floating chat bot */}
+
+      {/* Floating AI chat bot */}
       {user && <AIChatBot />}
     </BrowserRouter>
   )

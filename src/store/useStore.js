@@ -4,61 +4,71 @@ import { persist } from 'zustand/middleware'
 export const useStore = create(
   persist(
     (set, get) => ({
-      // User
       user: null,
       setUser: (user) => set({ user }),
-      
-      // Language
       language: 'en',
       setLanguage: (language) => set({ language }),
       toggleLanguage: () => set((state) => ({ 
         language: state.language === 'en' ? 'es' : 'en' 
       })),
-      
-      // Subscription
-      subscription: 'free', // 'free', 'premium', 'premium_plus'
+      subscription: 'free',
       setSubscription: (subscription) => set({ subscription }),
       showAds: () => get().subscription !== 'premium_plus',
-      
-      // Mood entries (local cache)
+      trialStartDate: null,
+      setTrialStartDate: (date) => set({ trialStartDate: date }),
+      aiChatConversationCount: 0,
+      setAIChatConversationCount: (count) => set({ aiChatConversationCount: count }),
+      incrementAIChatConversationCount: () => set((state) => ({
+        aiChatConversationCount: state.aiChatConversationCount + 1
+      })),
+      isTrialExpired: () => {
+        const { trialStartDate } = get()
+        if (!trialStartDate) {
+          set({ trialStartDate: new Date().getTime() })
+          return false
+        }
+        const now = new Date().getTime()
+        const threeDAysMs = 3 * 24 * 60 * 60 * 1000
+        return (now - trialStartDate) > threeDAysMs
+      },
+      isFreeChatLimitExceeded: () => {
+        const { subscription, aiChatConversationCount, isTrialExpired } = get()
+        if (subscription !== 'free') return false
+        if (isTrialExpired()) return true
+        return aiChatConversationCount >= 2
+      },
+      shouldShowPremiumModal: () => {
+        const { subscription, isFreeChatLimitExceeded } = get()
+        return subscription === 'free' && isFreeChatLimitExceeded()
+      },
+      aiChatMessages: [],
+      setAIChatMessages: (messages) => set({ aiChatMessages: messages }),
+      addAIChatMessage: (message) => set((state) => ({
+        aiChatMessages: [...state.aiChatMessages, message]
+      })),
+      clearAIChatMessages: () => set({ aiChatMessages: [] }),
       moodEntries: [],
       setMoodEntries: (entries) => set({ moodEntries: entries }),
       addMoodEntry: (entry) => set((state) => ({
         moodEntries: [entry, ...state.moodEntries]
       })),
-      
-      // Journal entries (local cache)
       journalEntries: [],
       setJournalEntries: (entries) => set({ journalEntries: entries }),
       addJournalEntry: (entry) => set((state) => ({
         journalEntries: [entry, ...state.journalEntries]
       })),
-      
-      // UI state
       isLoading: false,
       setIsLoading: (isLoading) => set({ isLoading }),
-      
-      // Notifications
       notificationsEnabled: true,
       setNotificationsEnabled: (enabled) => set({ notificationsEnabled: enabled }),
-      
-      // Sound
       soundEnabled: true,
       setSoundEnabled: (enabled) => set({ soundEnabled: enabled }),
-      
-      // Theme
-      theme: 'dark', // 'dark', 'light', 'ocean', 'sunset', 'forest'
+      theme: 'dark',
       setTheme: (theme) => set({ theme }),
-      
-      // Streak
       streak: 0,
       setStreak: (streak) => set({ streak }),
-      
-      // Onboarding
       hasSeenOnboarding: false,
       setHasSeenOnboarding: (value) => set({ hasSeenOnboarding: value }),
-      
-      // Today's mood
       todayMood: null,
       setTodayMood: (mood) => set({ todayMood: mood }),
     }),
@@ -72,6 +82,9 @@ export const useStore = create(
         theme: state.theme,
         streak: state.streak,
         hasSeenOnboarding: state.hasSeenOnboarding,
+        trialStartDate: state.trialStartDate,
+        aiChatConversationCount: state.aiChatConversationCount,
+        aiChatMessages: state.aiChatMessages,
       })
     }
   )

@@ -31,6 +31,17 @@ export default function AIChatBot() {
 
   const playAIVoice = (text) => {
     if (!voiceEnabled || !text) return;
+    
+    // Play sound effect if text contains specific keywords
+    if (text.includes('throat')) {
+      const audio = new Audio('/sounds/5th-Throat-741Hz.mp3');
+      audio.play().catch(err => console.log('Sound play error:', err));
+    } else if (text.includes('success')) {
+      const audio = new Audio('/sounds/success.mp3');
+      audio.play().catch(err => console.log('Sound play error:', err));
+    }
+    
+    // Use Web Speech API for text-to-speech
     window.speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(text);
     const voices = window.speechSynthesis.getVoices();
@@ -42,13 +53,6 @@ export default function AIChatBot() {
     utterance.voice = preferredVoice;
     utterance.lang = langCode;
     utterance.rate = 0.95;
-
-    // Play sound effects based on text content
-    if (text.includes('throat')) {
-      utterance.text += '5th-Throat-741Hz.mp3';
-    } else if (text.includes('success')) {
-      utterance.text += 'success.mp3';
-    }
 
     window.speechSynthesis.speak(utterance);
   };
@@ -74,19 +78,11 @@ export default function AIChatBot() {
           : "You are Paz, a compassionate spiritual guide. Always respond in English. Keep it brief (1-2 sentences) and empathetic.";
 
         chatSession.current = model.startChat({
-          history: [
-            { 
-              role: "user", 
-              parts: [{ text: systemPrompt }] 
-            },
-            { 
-              role: "model", 
-              parts: [{ text: currentLang === 'es' ? "Entendido, soy Paz. ¿Cómo te sientes?" : "Understood, I am Paz. How are you feeling?" }] 
-            },
-          ],
+          history: [],
+          systemInstruction: systemPrompt,
           generationConfig: {
             maxOutputTokens: 150,
-            temperature: 0.8, // More natural, less repetitive
+            temperature: 0.8,
           },
         });
       }
